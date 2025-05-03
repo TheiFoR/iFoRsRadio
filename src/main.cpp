@@ -1,20 +1,35 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include "src/core/core.h"
-#include "src/utils/qmlregistration.h"
 #include "src/enums/pages.h"
+#include "src/enums/connectionstatus.h"
+
+void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    QByteArray localMsg = msg.toLocal8Bit();
+    fprintf(stderr, "[%s] %s\n", context.category, localMsg.constData());
+}
 
 int main(int argc, char *argv[])
 {
+    qInstallMessageHandler(messageHandler);
+
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    Core core;
-    QmlRegistration qmlRegistration(&engine);
+    qRegisterMetaType<Pages::Page>("Pages");
+    qmlRegisterUncreatableType<Pages>("Enums", 1, 0, "Pages", "Not creatable as it is an enum type");
 
-    qmlRegistration.registerEnum<Pages>("Enums", "Pages");
-    qmlRegistration.registerContext("core", core.uiManager());
+    qRegisterMetaType<ConnectionStatus>("ConnectionStatuses");
+    qmlRegisterUncreatableType<ConnectionStatuses>("Enums", 1, 0, "ConnectionStatuses", "Not creatable as it is an enum type");
+
+    Core core;
+
+    engine.rootContext()->setContextProperty("core", core.uiManager());
+
+    core.start();
+
 
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(

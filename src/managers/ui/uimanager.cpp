@@ -1,12 +1,21 @@
 #include "uimanager.h"
 
+LOG_DECLARE(UIManager, Core)
+
 UIManager::UIManager(QObject *parent)
     : UInterface{parent}
-{}
+{
+    qCInfo(categoryUIManagerCore) << "Create";
+}
 
 void UIManager::registrationSubscribe()
 {
-    emit subscribe(app::model::RadioModel::__name__, this, std::bind(&UIManager::handleUpdateRadioModelPointer, this, std::placeholders::_1));
+    qCInfo(categoryUIManagerCore) << "Registration subscription started";
+
+    registrateTransfer(&m_server, this);
+    registrateTransfer(&m_radioStations, this);
+
+    qCInfo(categoryUIManagerCore) << "Registration subscription completed";
 }
 
 Pages::Page UIManager::currentPage() const
@@ -21,20 +30,11 @@ void UIManager::setCurrentPage(const Pages::Page &newCurrentPage)
     emit currentPageChanged();
 }
 
-UListModel* UIManager::radioModel()
+UIServerManager* UIManager::server()
 {
-    return m_radioModel;
+    return &m_server;
 }
-
-void UIManager::setRadioModel(UListModel* newRadioModel)
+UIRadioStationsManager* UIManager::radioStations()
 {
-    if (m_radioModel == newRadioModel)
-        return;
-    m_radioModel = newRadioModel;
-    emit radioModelChanged();
-}
-
-void UIManager::handleUpdateRadioModelPointer(const QVariantMap& data)
-{
-    qWarning() << 2222222;
+    return &m_radioStations;
 }

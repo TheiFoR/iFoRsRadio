@@ -1,11 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
 
+import Enums
+
 Window {
     width: 880
     height: 550
     visible: true
     title: qsTr("iFoRsRadio")
+
 
     RowLayout{
         id: rootContainer
@@ -17,7 +20,7 @@ Window {
 
         spacing: 10
 
-        Column{
+        ColumnLayout{
             id: leftSideContainer
 
             Layout.maximumWidth: 200
@@ -29,10 +32,45 @@ Window {
 
             LogoPanel{
                 id: logoPanel
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Layout.maximumHeight: 30
             }
 
             NavigationPanel{
                 id: navigationPanel
+
+                Layout.fillWidth: true
+                Layout.fillHeight: false
+            }
+
+            Item{
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            Text{
+                id: serverConnectionStatus
+
+                Layout.fillWidth: true
+                Layout.fillHeight: false
+
+                text: {
+                    let text = qsTr("Server status") + ": "
+                    if(core.server.connectionStatus === ConnectionStatuses.NoConnection){
+                        return text + qsTr("No connection")
+                    }
+                    else if(core.server.connectionStatus === ConnectionStatuses.Connecting){
+                        return text + qsTr("Connecting")
+                    }
+                    else if(core.server.connectionStatus === ConnectionStatuses.Connected){
+                        return text + qsTr("Connected")
+                    }
+
+                    return text + qsTr("Unknown")
+                }
             }
         }
 
@@ -41,7 +79,7 @@ Window {
 
             currentIndex: core.currentPage
 
-            HomePage{}
+            RadioStationPage{}
             RoomsPage{}
             SettingsPage{}
         }

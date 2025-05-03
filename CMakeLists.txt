@@ -26,13 +26,15 @@ set(QT_QML_COMPILER ON CACHE BOOL "Enable QML compiler")
 set(ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # Set the directory for Qt's binary files (e.g., Qt DLLs)
-set(QT_BIN_DIR ${CMAKE_PREFIX_PATH}/bin)
+set(QT_BIN_DIR ${CMAKE_PREFIX_PATH}/../../../bin)
 
 # Set the directory where Qt plugins are located
-set(QT_PLUGINS_DIR "${CMAKE_PREFIX_PATH}/plugins")
+set(QT_PLUGINS_DIR ${CMAKE_PREFIX_PATH}/../../../plugins)
 
 # Set the directory for Qt QML files
-set(QT_QML_DIR "${CMAKE_PREFIX_PATH}/qml")
+set(QT_QML_DIR ${CMAKE_PREFIX_PATH}/../../../qml)
+
+message(STATUS ARRRA ${QT_QML_DIR})
 
 # List of Qt dependencies to link with (can be expanded later with more components)
 set(DEP_LIST

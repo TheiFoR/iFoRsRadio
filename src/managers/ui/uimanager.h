@@ -5,6 +5,8 @@
 
 #include "src/enums/pages.h"
 #include "src/interface/uinterface.h"
+#include "src/managers/ui/radio/uiradiostationsmanager.h"
+#include "src/managers/ui/server/uiservermanager.h"
 #include "src/models/list/ulistmodel.h"
 
 class UIManager : public UInterface
@@ -13,7 +15,8 @@ class UIManager : public UInterface
 
     Q_PROPERTY(Pages::Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged FINAL)
 
-    Q_PROPERTY(UListModel* radioModel READ radioModel NOTIFY radioModelChanged FINAL)
+    Q_PROPERTY(UIServerManager* server READ server CONSTANT FINAL)
+    Q_PROPERTY(UIRadioStationsManager* radioStations READ radioStations CONSTANT FINAL)
 
 public:
     explicit UIManager(QObject *parent = nullptr);
@@ -23,21 +26,17 @@ public:
     Pages::Page currentPage() const;
     void setCurrentPage(const Pages::Page &newCurrentPage);
 
-    UListModel* radioModel();
-    void setRadioModel(UListModel* newRadioModel);
-
-public slots:
-    void handleUpdateRadioModelPointer(const QVariantMap& data);
+    UIServerManager* server();
+    UIRadioStationsManager* radioStations();
 
 signals:
     void currentPageChanged();
-    void radioModelChanged();
 
 private:
-    Pages::Page m_currentPage = Pages::Page::Home;
+    Pages::Page m_currentPage = Pages::RadioStations;
 
-    UListModel* m_radioModel = nullptr;
-
+    UIServerManager m_server;
+    UIRadioStationsManager m_radioStations;
 };
 
 #endif // UIMANAGER_H

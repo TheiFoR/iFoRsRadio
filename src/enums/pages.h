@@ -8,7 +8,7 @@ class Pages : public QObject {
 
 public:
     enum Page {
-        Home = 0,
+        RadioStations = 0,
         Rooms = 1,
         Settings = 2,
     };

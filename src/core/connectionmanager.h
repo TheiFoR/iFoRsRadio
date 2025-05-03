@@ -24,17 +24,20 @@ public slots:
     void handleCreateSubscribe(const QString& commandName, UInterface* obj);
     void handleRemoveSubscribe(const QString& commandName, UInterface* obj);
 
-    void handleSubscribe(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
-    void handleUnsubscribe(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
+    void handleSubscriber(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
+    void handleUnsubscriber(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
 
-    void handleSubscribe(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
-    void handleUnsubscribe(const QString& commandName, UInterface* obj, CallbackPacketFunction function);    
+    void handleSubscriber(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
+    void handleUnsubscriber(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
 
 signals:
     void updateConnections();
 
 private slots:
     void handleUpdateConnections();
+
+    void onCommandReceived(const QString& commandName, const QVariantMap& data);
+    void onPacketReceived(const QString& commandName, const QVariantMap& data);
 
 private:
     QMap<const QString, QList<CommandFunctionContext>> m_commandSubscribers;

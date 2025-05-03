@@ -11,11 +11,11 @@ Column {
     Button{
         id: homeButton
 
-        text: qsTr("Home")
+        text: qsTr("Radio stations")
         font.pixelSize: 16
 
         onClicked:{
-            core.currentPage = Pages.Home
+            core.currentPage = Pages.RadioStations
         }
     }
     Button{

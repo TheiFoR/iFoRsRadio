@@ -3,9 +3,11 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <QLoggingCategory>
 
 #include "api/internal/model.h"
 #include "src/types/types.h"
+#include "src/types/logdef.h"
 
 using namespace std::placeholders;
 
@@ -17,10 +19,6 @@ public:
 
     virtual void registrationSubscribe() = 0;
     void registrateTransfer(UInterface* fromUInterface, UInterface* toUInterface);
-
-public slots:
-    void invoke(CallbackCommandFunction function, const QVariantMap& data);
-    void invoke(CallbackPacketFunction function, const QString& commandName, const QVariantMap& data);
 
 signals:
     void signalUCommand(const QString& commandName, const QVariantMap &data);

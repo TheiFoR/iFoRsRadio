@@ -14,15 +14,6 @@ void UInterface::registrateTransfer(UInterface *fromUInterface, UInterface *toUI
 
     QObject::connect(fromUInterface, &UInterface::createSubscribe, toUInterface, &UInterface::createSubscribe);
     QObject::connect(fromUInterface, &UInterface::removeSubscribe, toUInterface, &UInterface::removeSubscribe);
-}
 
-void UInterface::invoke(CallbackCommandFunction function, const QVariantMap& data)
-{
-    function(data);
+    fromUInterface->registrationSubscribe();
 }
-
-void UInterface::invoke(CallbackPacketFunction function, const QString& commandName, const QVariantMap& data)
-{
-    function(commandName, data);
-}
-

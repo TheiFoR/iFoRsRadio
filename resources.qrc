@@ -4,7 +4,7 @@
         <file>qml/NavigationPanel.qml</file>
         <file>qml/LogoPanel.qml</file>
         <file>qml/UNavigationButton.qml</file>
-        <file>qml/HomePage.qml</file>
+        <file>qml/RadioStationPage.qml</file>
         <file>qml/SettingsPage.qml</file>
         <file>qml/RoomsPage.qml</file>
     </qresource>

@@ -11,6 +11,8 @@
 class UListModel : public QAbstractListModel {
     Q_OBJECT
 
+    Q_PROPERTY(qsizetype count READ count WRITE setCount NOTIFY countChanged FINAL)
+
 public:
     explicit UListModel(QObject* parent = nullptr);
 
@@ -27,9 +29,18 @@ public:
 
     void setRoleNames(const QStringList& roles);
 
+    qsizetype count() const;
+
+signals:
+    void countChanged();
+
 private:
     QVector<QVariantMap> m_data;
     QHash<int, QByteArray> m_roles;
+
+    qsizetype m_count;
+
+    void setCount(qsizetype newCount);
 };
 
 #endif // ULISTMODEL_H

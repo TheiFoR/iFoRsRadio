@@ -34,6 +34,7 @@ void UListModel::appendItem(const QVariantMap& item) {
     beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
     m_data.append(item);
     endInsertRows();
+    setCount(m_data.size());
 }
 
 void UListModel::updateItem(int index, const QVariantMap& item) {
@@ -51,12 +52,14 @@ void UListModel::removeItem(int index) {
     beginRemoveRows(QModelIndex(), index, index);
     m_data.removeAt(index);
     endRemoveRows();
+    setCount(m_data.size());
 }
 
 void UListModel::clear() {
     beginResetModel();
     m_data.clear();
     endResetModel();
+    setCount(m_data.size());
 }
 
 QVariantMap UListModel::getItem(int index) const {
@@ -64,4 +67,16 @@ QVariantMap UListModel::getItem(int index) const {
         return QVariantMap();
 
     return m_data.at(index);
+}
+
+qsizetype UListModel::count() const
+{
+    return m_count;
+}
+void UListModel::setCount(qsizetype newCount)
+{
+    if (m_count == newCount)
+        return;
+    m_count = newCount;
+    emit countChanged();
 }

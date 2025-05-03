@@ -3,13 +3,16 @@ import QtQuick
 Row {
     id: root
 
+    property alias text: logoText.text
+    property alias fontSize: logoText.font.pixelSize
+
     spacing: 5
 
     Rectangle{
         id: logoRectangle
 
-        height: 30
-        width: 30
+        height: parent.height
+        width: parent.height
 
         radius: 10
 
@@ -18,6 +21,10 @@ Row {
 
     Text{
         id: logoText
+
+        anchors{
+            verticalCenter: parent.verticalCenter
+        }
 
         text: "IFORSRADIO"
 
