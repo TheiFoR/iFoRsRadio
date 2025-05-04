@@ -7,5 +7,6 @@
         <file>qml/RadioStationPage.qml</file>
         <file>qml/SettingsPage.qml</file>
         <file>qml/RoomsPage.qml</file>
+        <file>assets/icons/play.svg</file>
     </qresource>
 </RCC>

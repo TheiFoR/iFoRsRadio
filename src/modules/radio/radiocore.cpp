@@ -92,6 +92,8 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
 
         ph.handle<ParameterHandler::Optional>(image, api::radio::RadioStation::Image);
 
+        image = image.toBase64();
+
         m_radioModel.appendItem({
             {"id", id},
             {"image", image},
