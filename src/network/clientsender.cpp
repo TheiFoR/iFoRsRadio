@@ -33,23 +33,34 @@ void ClientSender::sendData(const QString& commandName, const QVariantMap& data)
         qCWarning(categoryClientSenderSocket) << "Error: Socket is not set, cannot send data";
         return;
     }
+    qCInfo(categoryClientSenderSocket) << "Sending data, command:" << commandName;
 
-    QVariantMap packet;
-    packet["name"] = commandName;
-    packet["data"] = data;
+    QVariantMap dataPacket;
+    QVariantMap sizePacket;
 
-    QByteArray bytes;
-    QDataStream out(&bytes, QIODevice::WriteOnly);
-    out << packet;
+    dataPacket["name"] = commandName;
+    dataPacket["data"] = data;
 
-    m_socket->write(bytes);
-    qCDebug(categoryClientSenderSocket) << "Sending data with command:" << commandName;
-    if (m_socket->waitForBytesWritten()) {
-        qCDebug(categoryClientSenderSocket) << "Data sent successfully";
-    } else {
-        qCWarning(categoryClientSenderSocket) << "Failed to send data Error:" << m_socket->error();
-    }
+    QByteArray dataBytes;
+    QByteArray dataSizeBytes;
 
+    QDataStream dataOut(&dataBytes, QIODevice::WriteOnly);
+
+    dataOut << dataPacket;
+
+    sizePacket["size"] = quint64(dataBytes.size());
+
+    QDataStream sizeDataOut(&dataSizeBytes, QIODevice::WriteOnly);
+
+    sizeDataOut << sizePacket;
+
+    qCDebug(categoryClientSenderSocket) << "Packet datasize size:" << dataSizeBytes.size();
+    qCDebug(categoryClientSenderSocket) << "Packet data size:" << dataBytes.size();
+
+    //qCDebug(categoryClientHandlerSocket) << "Raw data to send:" << bytes;
+    m_socket->write(dataSizeBytes);
+    m_socket->flush();
+    m_socket->write(dataBytes);
     m_socket->flush();
 }
 
