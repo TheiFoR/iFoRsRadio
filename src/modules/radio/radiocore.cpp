@@ -106,7 +106,7 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
 
     emit signalUCommand(app::model::RadioModel::__name__, radioListModel);
 
-    qCInfo(categoryRadioCoreCore) << "Added" << m_radioModel.count() << "radio station!";
+    qCInfo(categoryRadioCoreCore) << "Added" << m_radioModel.count() << "radio station!" << "Data pointer:" << radioListModel;
 }
 
 ConnectionStatuses::Status RadioCore::serverConnectionStatus() const
