@@ -30,6 +30,7 @@ private:
 
     QByteArray m_buffer;
     quint64 m_expectedSize = 0;
+    const qsizetype m_datasizePacketSize = 29;
 };
 
 #endif // CLIENTLISTENER_H

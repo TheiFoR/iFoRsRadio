@@ -12,6 +12,7 @@ ClientSender::ClientSender(QObject *parent)
 void ClientSender::setSocket(QTcpSocket *socket)
 {
     m_socket = socket;
+    connect(socket, &QTcpSocket::errorOccurred, this, &ClientSender::onErrorOccurred);
 
     qCDebug(categoryClientSenderCore) << "Socket set successfully. Pointer:" << m_socket;
 }
@@ -41,16 +42,18 @@ void ClientSender::sendData(const QString& commandName, const QVariantMap& data)
     QDataStream out(&bytes, QIODevice::WriteOnly);
     out << packet;
 
-    qCDebug(categoryClientSenderSocket) << "Sending data with command:" << commandName;
-    // qCDebug(categoryClientSenderSocket) << "Sending data raw:" << bytes;
-    // qCDebug(categoryClientSenderSocket) << "Sending data map:" << packet;
-
     m_socket->write(bytes);
+    qCDebug(categoryClientSenderSocket) << "Sending data with command:" << commandName;
     if (m_socket->waitForBytesWritten()) {
         qCDebug(categoryClientSenderSocket) << "Data sent successfully";
     } else {
-        qCWarning(categoryClientSenderSocket) << "Failed to send data";
+        qCWarning(categoryClientSenderSocket) << "Failed to send data Error:" << m_socket->error();
     }
 
     m_socket->flush();
+}
+
+void ClientSender::onErrorOccurred(QAbstractSocket::SocketError error)
+{
+    qCWarning(categoryClientSenderSocket) << "Socket error occurred:" << error << m_socket->errorString();
 }

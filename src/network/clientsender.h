@@ -24,6 +24,8 @@ public:
 
     void sendData(const QString& commandName, const QVariantMap& data);
 
+private slots:
+    void onErrorOccurred(QAbstractSocket::SocketError error);
 private:
     QTcpSocket* m_socket = nullptr;
 };

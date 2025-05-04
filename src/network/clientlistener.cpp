@@ -46,7 +46,7 @@ void ClientListener::read()
         if(m_expectedSize == 0){
             QVariantMap sizePacket;
 
-            QByteArray bytes = m_socket->readAll();
+            QByteArray bytes = m_socket->read(m_datasizePacketSize);
             QDataStream in(bytes);
             in >> sizePacket;
 
@@ -56,8 +56,8 @@ void ClientListener::read()
             }
 
             m_expectedSize = sizePacket["size"].toULongLong();
-            availableBytes = 0;
-            qCInfo(categoryClientListenerSocket) << "Next packet size:" << m_expectedSize;
+            availableBytes -= m_datasizePacketSize;
+            qCInfo(categoryClientListenerSocket) << "Next packet size:" << m_expectedSize << "|" << availableBytes << " bytes left";
             continue;
         }
 
@@ -65,10 +65,14 @@ void ClientListener::read()
             m_buffer.append(m_socket->read(m_expectedSize));
             availableBytes -= m_expectedSize;
         }
+        else if(m_buffer.size() + availableBytes > m_expectedSize){
+            quint64 size = m_expectedSize - m_buffer.size();
+            m_buffer.append(m_socket->read(size));
+            availableBytes -= size;
+        }
         else{
-            QByteArray bytes = m_socket->readAll();
-            m_buffer.append(bytes);
-            availableBytes -= bytes.size();
+            m_buffer.append(m_socket->read(availableBytes));
+            availableBytes = 0;
         }
 
         if(m_buffer.size() < m_expectedSize){
