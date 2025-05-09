@@ -13,6 +13,7 @@ void UIManager::registrationSubscribe()
     qCInfo(categoryUIManagerCore) << "Registration subscription started";
 
     registrateTransfer(&m_server, this);
+    registrateTransfer(&m_client, this);
     registrateTransfer(&m_radioStations, this);
 
     qCInfo(categoryUIManagerCore) << "Registration subscription completed";
@@ -34,7 +35,12 @@ UIServerManager* UIManager::server()
 {
     return &m_server;
 }
+UIClientManager* UIManager::client()
+{
+    return &m_client;
+}
 UIRadioStationsManager* UIManager::radioStations()
 {
     return &m_radioStations;
 }
+

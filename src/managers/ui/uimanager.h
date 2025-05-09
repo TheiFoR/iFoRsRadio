@@ -5,6 +5,7 @@
 
 #include "src/enums/pages.h"
 #include "src/interface/uinterface.h"
+#include "src/managers/ui/client/uiclientmanager.h"
 #include "src/managers/ui/radio/uiradiostationsmanager.h"
 #include "src/managers/ui/server/uiservermanager.h"
 #include "src/models/list/ulistmodel.h"
@@ -16,6 +17,7 @@ class UIManager : public UInterface
     Q_PROPERTY(Pages::Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged FINAL)
 
     Q_PROPERTY(UIServerManager* server READ server CONSTANT FINAL)
+    Q_PROPERTY(UIClientManager* client READ client CONSTANT FINAL)
     Q_PROPERTY(UIRadioStationsManager* radioStations READ radioStations CONSTANT FINAL)
 
 public:
@@ -27,16 +29,21 @@ public:
     void setCurrentPage(const Pages::Page &newCurrentPage);
 
     UIServerManager* server();
+    UIClientManager* client();
     UIRadioStationsManager* radioStations();
+
 
 signals:
     void currentPageChanged();
 
+    void clientChanged();
+
 private:
     Pages::Page m_currentPage = Pages::RadioStations;
 
-    UIServerManager m_server;
-    UIRadioStationsManager m_radioStations;
+    UIServerManager m_server{this};
+    UIClientManager m_client{this};
+    UIRadioStationsManager m_radioStations{this};
 };
 
 #endif // UIMANAGER_H

@@ -59,17 +59,21 @@ Window {
 
                 text: {
                     let text = qsTr("Server status") + ": "
+                    let status;
                     if(core.server.connectionStatus === ConnectionStatuses.NoConnection){
-                        return text + qsTr("No connection")
+                        status = qsTr("No connection")
                     }
                     else if(core.server.connectionStatus === ConnectionStatuses.Connecting){
-                        return text + qsTr("Connecting")
+                        status = qsTr("Connecting")
                     }
                     else if(core.server.connectionStatus === ConnectionStatuses.Connected){
-                        return text + qsTr("Connected")
+                        status = qsTr("Connected")
+                    }
+                    else{
+                        status = qsTr("Unknown")
                     }
 
-                    return text + qsTr("Unknown")
+                    return text + status + "\n Address: " + core.client.address
                 }
             }
         }

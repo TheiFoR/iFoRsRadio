@@ -7,6 +7,7 @@
 
 #include "api/external/server.h"
 #include "api/external/radio.h"
+#include "api/external/client.h"
 
 #include "src/interface/uinterface.h"
 

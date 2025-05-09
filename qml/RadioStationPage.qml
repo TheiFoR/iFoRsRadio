@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Effects
-import Qt3D.Render 2.15
 
 Item {
     id: radioStationsPageRoot

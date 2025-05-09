@@ -6,6 +6,7 @@
 #include "src/core/connectionmanager.h"
 #include "src/interface/uinterface.h"
 #include "src/managers/ui/uimanager.h"
+#include "src/modules/client/clientinfocore.h"
 #include "src/modules/radio/radiocore.h"
 #include "src/modules/server/serverconnectioncore.h"
 #include "src/network/client.h"
@@ -34,6 +35,7 @@ private:
 
     RadioCore m_radioCore{this};
     ServerConnectionCore m_serverConnectionCore{this};
+    ClientInfoCore m_clientInfoCore{this};
 
     Client m_client;
     QThread m_clientThread{this};

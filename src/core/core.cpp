@@ -23,9 +23,12 @@ void Core::registrationSubscribe()
     QObject::connect(this, &UInterface::removeSubscribe, &m_connectionManager, &ConnectionManager::handleRemoveSubscribe);
 
     registrateTransfer(&m_uiManager, this);
+
     registrateTransfer(&m_client, this);
+
     registrateTransfer(&m_radioCore, this);
     registrateTransfer(&m_serverConnectionCore, this);
+    registrateTransfer(&m_clientInfoCore, this);
 
     emit subscribe(app::server::ServerStatus::__name__, this, std::bind(&Core::handleServerConnectionStatus, this, std::placeholders::_1));
 

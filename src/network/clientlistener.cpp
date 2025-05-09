@@ -104,5 +104,15 @@ void ClientListener::read()
         qCDebug(categoryClientListenerSocket) << "Received command:" << commandName;
 
         emit signalUCommand(commandName, data);
+
+        QVariantMap clientInfo;
+
+        quint32 ip = m_socket->localAddress().toIPv4Address();
+        quint16 port = m_socket->localPort();
+
+        clientInfo[api::client::ClientInfo::Ip] = ip;
+        clientInfo[api::client::ClientInfo::Port] = port;
+
+        emit signalUCommand(api::client::ClientInfo::__name__, clientInfo);
     }
 }
