@@ -32,23 +32,31 @@ signals:
     void connecting();
     void disconnected();
 
+    void onReceive(const QString& commandName, const QVariantMap& data);
+
 private slots:
     void onConnected();
     void onDisconnected();
     void onErrorOccurred(QAbstractSocket::SocketError socketError);
 
+    void onReadyRead();
+
+    void send(const QString& commandName, const QVariantMap& data);
+
     void attemptReconnect();
 
 private:
     const quint16 m_reconectInterval = 1000; // 1 seconds
+    QByteArray m_buffer;
 
     std::unique_ptr<QTcpSocket> m_socket = nullptr;
-
     std::unique_ptr<QTimer> m_reconnectTimer = nullptr;
 
     //QString m_ip = "5.144.98.82";
     QString m_ip = "127.0.0.1";
     quint16 m_port = 1310;
+
+    void parseData();
 
     void saveSettings();
     void loadSettings();
