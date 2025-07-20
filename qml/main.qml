@@ -8,6 +8,7 @@ Window {
     height: 550
     visible: true
     title: qsTr("iFoRsRadio")
+    color: core.server.connectionStatus == ConnectionStatuses.Connected ? "#ffffff" : "red"
 
 
     RowLayout{

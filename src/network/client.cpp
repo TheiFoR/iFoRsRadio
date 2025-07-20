@@ -23,8 +23,11 @@ void Client::registrationSubscribe()
 {
     qCDebug(categoryClientCore) << "Start registration of subscribers";
 
+    emit createSubscribe(app::client::ClientInfo::__name__, this);
     emit createSubscribe(app::server::ServerStatus::__name__, this);
     emit createSubscribe(api::server::ServerConnectionResponse::__name__, this);
+
+    emit subscribe(api::server::ServerConnectionResponse::__name__, this, std::bind(&Client::handleServerConnectionStatus, this, std::placeholders::_1));
 
     qCDebug(categoryClientCore) << "Subscriber registration is complete";
 }
@@ -35,9 +38,12 @@ void Client::start()
 
     m_socket = std::make_unique<QTcpSocket>(this);
     m_reconnectTimer = std::make_unique<QTimer>(this);
+    m_rconnectionConfirmationTimer = std::make_unique<QTimer>(this);
 
     m_reconnectTimer->setInterval(m_reconectInterval);
+    m_rconnectionConfirmationTimer->setInterval(m_connectionConfirmationInterval);
     connect(m_reconnectTimer.get(), &QTimer::timeout, this, &Client::attemptReconnect);
+    connect(m_rconnectionConfirmationTimer.get(), &QTimer::timeout, this, &Client::attempConnectionConfirmation);
 
     connect(m_socket.get(), &QTcpSocket::connected, this, &Client::onConnected);
     connect(m_socket.get(), &QTcpSocket::disconnected, this, &Client::onDisconnected);
@@ -63,6 +69,11 @@ void Client::attemptReconnect()
                                      << m_ip << ":" << m_port;
 
     m_socket->connectToHost(QHostAddress(m_ip), m_port);
+}
+
+void Client::attempConnectionConfirmation()
+{
+    send(api::server::ServerConnectionRequest::__name__, {});
 }
 
 void Client::parseData()
@@ -112,11 +123,27 @@ void Client::onConnected() {
 
     m_reconnectTimer->stop();
 
-    send(api::server::ServerConnectionRequest::__name__, {});
+    QVariantMap clienInfoData;
+    clienInfoData[app::client::ClientInfo::Ip] = m_socket->localAddress().toString();
+    clienInfoData[app::client::ClientInfo::Port] = m_socket->localPort();
+    emit signalUCommand(app::client::ClientInfo::__name__, clienInfoData);
+
+    m_rconnectionConfirmationTimer->start();
+
+    attempConnectionConfirmation();
 }
 
 void Client::onDisconnected() {
     qCInfo(categoryClientConnection) << "Disconnected from server";
+
+    QVariantMap serverStatusData;
+    serverStatusData[app::server::ServerStatus::Status] = ConnectionStatuses::Status::NoConnection;
+    emit signalUCommand(app::server::ServerStatus::__name__, serverStatusData);
+
+    QVariantMap clienInfoData;
+    clienInfoData[app::client::ClientInfo::Ip] = "Unknown";
+    clienInfoData[app::client::ClientInfo::Port] = 00000;
+    emit signalUCommand(app::client::ClientInfo::__name__, clienInfoData);
 
     m_reconnectTimer->start();
 }
@@ -135,82 +162,6 @@ void Client::onReadyRead()
 
     while(m_socket->bytesAvailable() > 0){
         m_buffer.append(m_socket->readAll());
-
-
-
-        // QVariantMap packet;
-
-        // if(m_expectedSize == 0){
-        //     QVariantMap sizePacket;
-
-        //     QByteArray bytes = m_socket->read(m_datasizePacketSize);
-        //     QDataStream in(bytes);
-        //     in >> sizePacket;
-
-        //     if(!sizePacket.contains("size")){
-        //         qCWarning(categoryClientRead) << "Invalid packet structure. Waiting...";
-        //         continue;
-        //     }
-
-        //     m_expectedSize = sizePacket["size"].toULongLong();
-        //     availableBytes -= m_datasizePacketSize;
-        //     qCInfo(categoryClientRead) << "Next packet size:" << m_expectedSize << "|" << availableBytes << " bytes left";
-        //     continue;
-        // }
-
-        // if(availableBytes > m_expectedSize){
-        //     m_buffer.append(m_socket->read(m_expectedSize));
-        //     availableBytes -= m_expectedSize;
-        // }
-        // else if(m_buffer.size() + availableBytes > m_expectedSize){
-        //     quint64 size = m_expectedSize - m_buffer.size();
-        //     m_buffer.append(m_socket->read(size));
-        //     availableBytes -= size;
-        // }
-        // else{
-        //     m_buffer.append(m_socket->read(availableBytes));
-        //     availableBytes = 0;
-        // }
-
-        // if(m_buffer.size() < m_expectedSize){
-        //     qCInfo(categoryClientRead) << "Bytes:" << m_buffer.size() << "/" << m_expectedSize << "|" << m_buffer.size() * 100 / m_expectedSize << "% |" << "Waiting...";
-        //     continue;
-        // }
-        // else if(m_buffer.size() == m_expectedSize){
-        //     QDataStream in(m_buffer);
-        //     in >> packet;
-        //     m_buffer.clear();
-        //     m_expectedSize = 0;
-        //     qCInfo(categoryClientRead) << "Great full packet received!";
-        // }
-        // else{
-        //     qCCritical(categoryClientRead) << "ERROR ---> :" << m_buffer.size() << "/" << m_expectedSize << "|" << m_buffer.size() * 100 / m_expectedSize << "%";
-        //     continue;
-        // }
-
-
-
-        // if (!packet.contains("name") || !packet.contains("data")) {
-        //     qCWarning(categoryClientListenerSocket) << "Invalid packet structure";
-        //     continue;
-        // }
-
-        // QString commandName = packet["name"].toString();
-        // QVariantMap data = packet["data"].toMap();
-
-        // qCDebug(categoryClientListenerSocket) << "Received command:" << commandName;
-
-        // emit signalUCommand(commandName, data);
-
-        // QVariantMap clientInfo;
-
-        // quint32 ip = m_socket->localAddress().toIPv4Address();
-        // quint16 port = m_socket->localPort();
-
-        // clientInfo[api::client::ClientInfo::Ip] = ip;
-        // clientInfo[api::client::ClientInfo::Port] = port;
-
-        // emit signalUCommand(api::client::ClientInfo::__name__, clientInfo);
     }
 
     parseData();
@@ -226,6 +177,22 @@ void Client::loadSettings() {
     m_ip = Config::getValue("Server", "ip", m_ip);
     m_port = Config::getValue("Server", "port", m_port);
     qCInfo(categoryClientSettings) << "Settings loaded: ip:" << m_ip << " port:" << m_port;
+}
+
+void Client::handleServerConnectionStatus(const QVariantMap &data)
+{
+    ParameterHandler ph(data);
+
+    bool approved = false;
+
+    ph.handle<ParameterHandler::Optional>(approved, api::server::ServerConnectionResponse::Confirmation);
+
+    if(approved){
+        m_rconnectionConfirmationTimer->stop();
+    }
+    else{
+        return;
+    }
 }
 
 void Client::send(const QString &commandName, const QVariantMap &data)

@@ -10,10 +10,12 @@
 
 #include "api/internal/server.h"
 #include "api/external/server.h"
+#include "api/internal/client.h"
 
 #include "src/enums/connectionstatus.h"
 #include "src/interface/uinterface.h"
 #include "src/utils/config.h"
+#include "src/utils/parameterhandler.h"
 
 class Client : public UInterface
 {
@@ -44,13 +46,16 @@ private slots:
     void send(const QString& commandName, const QVariantMap& data);
 
     void attemptReconnect();
+    void attempConnectionConfirmation();
 
 private:
     const quint16 m_reconectInterval = 1000; // 1 seconds
+    const quint16 m_connectionConfirmationInterval = 5000; // 1 seconds
     QByteArray m_buffer;
 
     std::unique_ptr<QTcpSocket> m_socket = nullptr;
     std::unique_ptr<QTimer> m_reconnectTimer = nullptr;
+    std::unique_ptr<QTimer> m_rconnectionConfirmationTimer = nullptr;
 
     //QString m_ip = "5.144.98.82";
     QString m_ip = "127.0.0.1";
@@ -60,6 +65,8 @@ private:
 
     void saveSettings();
     void loadSettings();
+
+    void handleServerConnectionStatus(const QVariantMap& data);
 };
 
 #endif // CLIENT_H
