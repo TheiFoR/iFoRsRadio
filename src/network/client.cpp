@@ -25,9 +25,11 @@ void Client::registrationSubscribe()
 
     emit createSubscribe(app::client::ClientInfo::__name__, this);
     emit createSubscribe(app::server::ServerStatus::__name__, this);
+
     emit createSubscribe(api::server::ServerConnectionResponse::__name__, this);
 
     emit subscribe(api::server::ServerConnectionResponse::__name__, this, std::bind(&Client::handleServerConnectionStatus, this, std::placeholders::_1));
+    emit subscribe(api::radio::RadioStationListRequest::__name__, this, std::bind(&Client::send, this, std::placeholders::_1, std::placeholders::_2));
 
     qCDebug(categoryClientCore) << "Subscriber registration is complete";
 }
@@ -38,12 +40,12 @@ void Client::start()
 
     m_socket = std::make_unique<QTcpSocket>(this);
     m_reconnectTimer = std::make_unique<QTimer>(this);
-    m_rconnectionConfirmationTimer = std::make_unique<QTimer>(this);
+    m_reconnectionConfirmationTimer = std::make_unique<QTimer>(this);
 
     m_reconnectTimer->setInterval(m_reconectInterval);
-    m_rconnectionConfirmationTimer->setInterval(m_connectionConfirmationInterval);
+    m_reconnectionConfirmationTimer->setInterval(m_connectionConfirmationInterval);
     connect(m_reconnectTimer.get(), &QTimer::timeout, this, &Client::attemptReconnect);
-    connect(m_rconnectionConfirmationTimer.get(), &QTimer::timeout, this, &Client::attempConnectionConfirmation);
+    connect(m_reconnectionConfirmationTimer.get(), &QTimer::timeout, this, &Client::attempConnectionConfirmation);
 
     connect(m_socket.get(), &QTcpSocket::connected, this, &Client::onConnected);
     connect(m_socket.get(), &QTcpSocket::disconnected, this, &Client::onDisconnected);
@@ -73,7 +75,7 @@ void Client::attemptReconnect()
 
 void Client::attempConnectionConfirmation()
 {
-    send(api::server::ServerConnectionRequest::__name__, {});
+    send(api::server::ServerConnectionRequest::__name__);
 }
 
 void Client::parseData()
@@ -97,7 +99,7 @@ void Client::parseData()
         return;
     }
 
-    qCInfo(categoryClientRead) << "Expected packet size:" << expectedSize << "| Available data size:" << m_buffer.size() - sizeof(quint64);
+    qCDebug(categoryClientRead) << "Expected packet size:" << expectedSize << "| Available data size:" << m_buffer.size() - sizeof(quint64);
 
     QVariantMap packet;
     in >> packet;
@@ -128,7 +130,7 @@ void Client::onConnected() {
     clienInfoData[app::client::ClientInfo::Port] = m_socket->localPort();
     emit signalUCommand(app::client::ClientInfo::__name__, clienInfoData);
 
-    m_rconnectionConfirmationTimer->start();
+    m_reconnectionConfirmationTimer->start();
 
     attempConnectionConfirmation();
 }
@@ -154,7 +156,7 @@ void Client::onErrorOccurred(QAbstractSocket::SocketError socketError) {
 
 void Client::onReadyRead()
 {
-    qCInfo(categoryClientRead) << "New packet!";
+    qCDebug(categoryClientRead) << "New packet!";
     if (!m_socket) {
         qCWarning(categoryClientRead) << "Error: Socket is not set, cannot read data";
         return;
@@ -188,7 +190,7 @@ void Client::handleServerConnectionStatus(const QVariantMap &data)
     ph.handle<ParameterHandler::Optional>(approved, api::server::ServerConnectionResponse::Confirmation);
 
     if(approved){
-        m_rconnectionConfirmationTimer->stop();
+        m_reconnectionConfirmationTimer->stop();
     }
     else{
         return;

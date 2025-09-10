@@ -36,7 +36,8 @@ set(QT_QML_DIR ${Qt6_DIR}/../../../qml)
 
 # List of Qt dependencies to link with (can be expanded later with more components)
 set(DEP_LIST
-    Quick  # This is a list of dependencies; currently, it only contains Quick
+    Quick
+    Multimedia
 )
 
 include("${ROOT_DIR}/cmake/utils.cmake")
@@ -78,9 +79,11 @@ target_sources(${PROJECT_NAME}
 )
 
 # Link the Qt Quick library (and others in the DEP_LIST) to the executable
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE Qt6::${DEP_LIST}  # Link all the required Qt libraries from DEP_LIST
-)
+foreach(dep IN LISTS DEP_LIST)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE Qt6::${dep}  # Link all the required Qt libraries from DEP_LIST
+    )
+endforeach()
 
 # Set the runtime output directory for the executable
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")

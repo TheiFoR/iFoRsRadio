@@ -7,7 +7,7 @@ namespace app{
 namespace server{
 
 I_API(ServerStatus){
-    API_FIELD(Status) // M, see src/enums/status.h
+    API_FIELD(Status) // M, see src/enums/connectionstatus.h
 }
 
 } // server

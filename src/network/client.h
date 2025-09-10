@@ -9,8 +9,9 @@
 #include <QThread>
 
 #include "api/internal/server.h"
-#include "api/external/server.h"
 #include "api/internal/client.h"
+#include "api/external/server.h"
+#include "api/external/radio.h"
 
 #include "src/enums/connectionstatus.h"
 #include "src/interface/uinterface.h"
@@ -43,7 +44,7 @@ private slots:
 
     void onReadyRead();
 
-    void send(const QString& commandName, const QVariantMap& data);
+    void send(const QString& commandName, const QVariantMap& data = {});
 
     void attemptReconnect();
     void attempConnectionConfirmation();
@@ -55,7 +56,7 @@ private:
 
     std::unique_ptr<QTcpSocket> m_socket = nullptr;
     std::unique_ptr<QTimer> m_reconnectTimer = nullptr;
-    std::unique_ptr<QTimer> m_rconnectionConfirmationTimer = nullptr;
+    std::unique_ptr<QTimer> m_reconnectionConfirmationTimer = nullptr;
 
     //QString m_ip = "5.144.98.82";
     QString m_ip = "127.0.0.1";

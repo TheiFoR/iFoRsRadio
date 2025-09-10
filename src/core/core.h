@@ -6,9 +6,10 @@
 #include "src/core/connectionmanager.h"
 #include "src/interface/uinterface.h"
 #include "src/managers/ui/uimanager.h"
-#include "src/modules/client/clientinfocore.h"
-#include "src/modules/radio/radiocore.h"
-#include "src/modules/server/serverconnectioncore.h"
+#include "src/core/client/clientinfocore.h"
+#include "src/core/radio/radiocore.h"
+#include "src/core/server/serverconnectioncore.h"
+#include "src/modules/mediaplayer/mediaplayer.h"
 #include "src/network/client.h"
 
 class Core : public UInterface
@@ -32,6 +33,8 @@ signals:
 private:
     ConnectionManager m_connectionManager{this};
     UIManager m_uiManager{this};
+
+    MediaPlayer m_mediaPlayer{this};
 
     RadioCore m_radioCore{this};
     ServerConnectionCore m_serverConnectionCore{this};

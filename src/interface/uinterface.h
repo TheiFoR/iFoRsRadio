@@ -21,8 +21,8 @@ public:
     void registrateTransfer(UInterface* fromUInterface, UInterface* toUInterface);
 
 signals:
-    void signalUCommand(const QString& commandName, const QVariantMap &data);
-    void signalUPacket(const QString& commandName, const QVariantMap &data);
+    void signalUCommand(const QString& commandName, const QVariantMap &data = {});
+    void signalUPacket(const QString& commandName, const QVariantMap &data = {});
 
     void createSubscribe(const QString& commandName, UInterface* obj);
     void removeSubscribe(const QString& commandName, UInterface* obj);

@@ -26,6 +26,8 @@ void Core::registrationSubscribe()
 
     registrateTransfer(&m_client, this);
 
+    registrateTransfer(&m_mediaPlayer, this);
+
     registrateTransfer(&m_radioCore, this);
     registrateTransfer(&m_serverConnectionCore, this);
     registrateTransfer(&m_clientInfoCore, this);

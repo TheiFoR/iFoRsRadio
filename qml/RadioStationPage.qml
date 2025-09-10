@@ -19,7 +19,7 @@ Item {
             const gridWidth = radioStationsGrid.width
             const ceilItemCount = parseInt(gridWidth / (radioStationsGrid.radioStationWidth + radioStationsGrid.horizontalSpacing))
 
-            if(ceilItemCount >= core.radioStations.model.count){
+            if(ceilItemCount >= core.radioStations.proxyModel.count){
                 return radioStationsGrid.horizontalSpacing
             }
 
@@ -34,7 +34,7 @@ Item {
         cellHeight: radioStationsGrid.verticalSpacing + radioStationsGrid.radioStationHeight
         cellWidth: radioStationsGrid.currentHorizontalSpacing + radioStationsGrid.radioStationWidth
 
-        model: core.radioStations.model
+        model: core.radioStations.proxyModel
         delegate: Column{
             width: radioStationsGrid.cellWidth
             Rectangle{
@@ -50,7 +50,8 @@ Item {
                     id: img
                     width: parent.width
                     height: parent.height
-                    source: "data:image/jpg;base64," + model.image
+                    source: model.image
+                    fillMode: Image.PreserveAspectCrop
                 }
 
                 Rectangle
@@ -91,7 +92,8 @@ Item {
                         playIcon.opacity = 0
                     }
                     onClicked:{
-                        console.warn("Clicked on radio station index:", index)
+                        console.warn(model["name"])
+                        core.radioStations.play(model.id)
                     }
                 }
             }
