@@ -1,92 +1,177 @@
 import QtQuick
 import QtQuick.Layouts
 
-import Enums
+import Qt5Compat.GraphicalEffects
 
-Window {
+import Enums
+import UStyle
+
+UWindow {
+    id: root
+
     width: 880
     height: 550
-    visible: true
+
     title: qsTr("iFoRsRadio")
-    color: core.server.connectionStatus == ConnectionStatuses.Connected ? "#ffffff" : "red"
 
+    Item {
+        id: rootOpacityContainer
 
-    RowLayout{
-        id: rootContainer
+        anchors.fill: parent
 
-        anchors{
-            fill: parent
-            margins: 10
+        layer.enabled: true
+        layer.smooth: true
+
+        layer.effect: OpacityMask {
+            source: rootOpacityContainer
+            maskSource: Rectangle {
+                width: root.width
+                height: root.height
+                radius: root.radius
+                color: "white"
+            }
         }
 
-        spacing: 10
+        RowLayout{
+            id: rootContainer
 
-        ColumnLayout{
-            id: leftSideContainer
+            anchors{
+                fill: parent
+                // margins: root.padding
+            }
 
-            Layout.maximumWidth: 200
-            Layout.minimumWidth: 200
-
-            Layout.fillHeight: true
-
-            spacing: 20
-
-            LogoPanel{
-                id: logoPanel
+            Rectangle{
+                id: menuPanel
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                Layout.maximumHeight: 30
-            }
+                Layout.maximumWidth: leftSideContainer.childrenRect.width + leftSideContainer.anchors.margins * 2
+                Layout.minimumWidth: leftSideContainer.childrenRect.width + leftSideContainer.anchors.margins * 2
 
-            NavigationPanel{
-                id: navigationPanel
+                color: UStyle.neutral800
 
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-            }
+                ColumnLayout{
+                    id: leftSideContainer
 
-            Item{
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-
-            Text{
-                id: serverConnectionStatus
-
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-
-                text: {
-                    let text = qsTr("Server status") + ": "
-                    let status;
-                    if(core.server.connectionStatus === ConnectionStatuses.NoConnection){
-                        status = qsTr("No connection")
-                    }
-                    else if(core.server.connectionStatus === ConnectionStatuses.Connecting){
-                        status = qsTr("Connecting")
-                    }
-                    else if(core.server.connectionStatus === ConnectionStatuses.Connected){
-                        status = qsTr("Connected")
-                    }
-                    else{
-                        status = qsTr("Unknown")
+                    anchors{
+                        top: parent.top
+                        bottom: parent.bottom
+                        left: parent.left
+                        margins: 10
                     }
 
-                    return text + status + "\n Address: " + core.client.address
+                    spacing: 10
+
+                    LogoPanel{
+                        id: logoPanel
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        Layout.maximumHeight: 30
+                    }
+
+                    ColumnLayout{
+                        id: navigationContainer
+
+                        spacing: 10
+
+                        NavigationPanel{
+                            id: navigationPanel
+
+                            Layout.fillWidth: true
+                            Layout.fillHeight: false
+
+                            spacing: 10
+                        }
+
+                        Item{
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                    }
                 }
             }
         }
-
-        StackLayout{
-            id: pagesLayout
-
-            currentIndex: core.currentPage
-
-            RadioStationPage{}
-            RoomsPage{}
-            SettingsPage{}
-        }
     }
+
+    // RowLayout{
+    //     id: rootContainer
+
+    //     anchors{
+    //         fill: parent
+    //         margins: 10
+    //     }
+
+    //     spacing: 10
+
+    //     ColumnLayout{
+    //         id: leftSideContainer
+
+    //         Layout.maximumWidth: 200
+    //         Layout.minimumWidth: 200
+
+    //         Layout.fillHeight: true
+
+    //         spacing: 20
+
+    //         LogoPanel{
+    //             id: logoPanel
+
+    //             Layout.fillWidth: true
+    //             Layout.fillHeight: true
+
+    //             Layout.maximumHeight: 30
+    //         }
+
+    //         NavigationPanel{
+    //             id: navigationPanel
+
+    //             Layout.fillWidth: true
+    //             Layout.fillHeight: false
+    //         }
+
+    //         Item{
+    //             Layout.fillWidth: true
+    //             Layout.fillHeight: true
+    //         }
+
+    //         Text{
+    //             id: serverConnectionStatus
+
+    //             Layout.fillWidth: true
+    //             Layout.fillHeight: false
+
+    //             text: {
+    //                 let text = qsTr("Server status") + ": "
+    //                 let status;
+    //                 if(core.server.connectionStatus === ConnectionStatuses.NoConnection){
+    //                     status = qsTr("No connection")
+    //                 }
+    //                 else if(core.server.connectionStatus === ConnectionStatuses.Connecting){
+    //                     status = qsTr("Connecting")
+    //                 }
+    //                 else if(core.server.connectionStatus === ConnectionStatuses.Connected){
+    //                     status = qsTr("Connected")
+    //                 }
+    //                 else{
+    //                     status = qsTr("Unknown")
+    //                 }
+
+    //                 return text + status + "\n Address: " + core.client.address
+    //             }
+    //         }
+    //     }
+
+    //     StackLayout{
+    //         id: pagesLayout
+
+    //         currentIndex: core.currentPage
+
+    //         RadioStationPage{}
+    //         RoomsPage{}
+    //         SettingsPage{}
+    //     }
+    // }
 }

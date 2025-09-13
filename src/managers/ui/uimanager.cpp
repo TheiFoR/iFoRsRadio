@@ -44,3 +44,16 @@ UIRadioStationsManager* UIManager::radioStations()
     return &m_radioStations;
 }
 
+
+quint8 UIManager::styleIndex() const
+{
+    return m_styleIndex;
+}
+
+void UIManager::setStyleIndex(quint8 newStyleIndex)
+{
+    if (m_styleIndex == newStyleIndex)
+        return;
+    m_styleIndex = newStyleIndex;
+    emit styleIndexChanged();
+}

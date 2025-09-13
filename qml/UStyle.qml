@@ -1,0 +1,86 @@
+pragma Singleton
+
+import QtQuick
+
+QtObject {
+    id: root
+
+    // *** Colors ***
+    // - Neutral -
+    readonly property color white: Qt.color("#FFFFFF")
+    readonly property color veryLightGray: Qt.color("#E9E9E9")
+    readonly property color lightGray: Qt.color("#D4D4D4")
+    readonly property color silverGray: Qt.color("#B0B0B0")
+    readonly property color mediumGray: Qt.color("#8A8A8A")
+    readonly property color darkGray: Qt.color("#616161")
+    readonly property color charcoalGray: Qt.color("#464646")
+    readonly property color almostBlack: Qt.color("#2B2B2B")
+    readonly property color coalBlack: Qt.color("#101010")
+    readonly property color black: Qt.color("#000000")
+    // - Palette -
+    readonly property color indigoBlue: Qt.color("#4465FC")
+    readonly property color rosewood: Qt.color("#B84C4C")
+    readonly property color crimsonRed: Qt.color("#E40D0D")
+
+
+
+    // *** Neutral Colors ***
+    readonly property color neutral100: getNeutral100(core.styleIndex)
+    readonly property color neutral200: getNeutral200(core.styleIndex)
+    readonly property color neutral300: getNeutral300(core.styleIndex)
+    readonly property color neutral400: getNeutral400(core.styleIndex)
+    readonly property color neutral500: getNeutral500(core.styleIndex)
+    readonly property color neutral600: getNeutral600(core.styleIndex)
+    readonly property color neutral700: getNeutral700(core.styleIndex)
+    readonly property color neutral800: getNeutral800(core.styleIndex)
+    readonly property color neutral900: getNeutral900(core.styleIndex)
+
+
+
+    // *** Functions to get colors based on style index (for future themes) ***
+    function getNeutral100(styleIndex){
+        if(styleIndex === 0){
+            return root.white
+        }
+    }
+    function getNeutral200(styleIndex){
+        if(styleIndex === 0){
+            return root.veryLightGray
+        }
+    }
+    function getNeutral300(styleIndex){
+        if(styleIndex === 0){
+            return root.lightGray
+        }
+    }
+    function getNeutral400(styleIndex){
+        if(styleIndex === 0){
+            return root.silverGray
+        }
+    }
+    function getNeutral500(styleIndex){
+        if(styleIndex === 0){
+            return root.mediumGray
+        }
+    }
+    function getNeutral600(styleIndex){
+        if(styleIndex === 0){
+            return root.darkGray
+        }
+    }
+    function getNeutral700(styleIndex){
+        if(styleIndex === 0){
+            return root.charcoalGray
+        }
+    }
+    function getNeutral800(styleIndex){
+        if(styleIndex === 0){
+            return root.almostBlack
+        }
+    }
+    function getNeutral900(styleIndex){
+        if(styleIndex === 0){
+            return root.coalBlack
+        }
+    }
+}

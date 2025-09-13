@@ -5,6 +5,10 @@ cmake_minimum_required(VERSION 3.16)
 set(PROJECT_NAME iFoRsRadio)
 project(${PROJECT_NAME} VERSION 1.0 LANGUAGES CXX)
 
+if(WIN32)
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/app/app.rc")
+endif()
+
 # Set the CMake build type to Release by default
 set(CMAKE_PREFIX_PATH "F:/Programs/Qt/6.8.2/msvc2022_64/lib/cmake/Qt6")
 
@@ -67,8 +71,10 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_resources(RESOURCE_FILES resources.qrc)
 
 # Define the executable target for the project
-qt_add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME}
+    WIN32  # Specify that this is a Windows application
     src/main.cpp # Main entry point for the application
+    ${APP_ICON_RESOURCE_WINDOWS}
 )
 
 # Add the source and resource files to the executable target

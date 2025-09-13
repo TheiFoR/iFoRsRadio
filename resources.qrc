@@ -8,5 +8,16 @@
         <file>qml/SettingsPage.qml</file>
         <file>qml/RoomsPage.qml</file>
         <file>assets/icons/play.svg</file>
+        <file>qml/UStyle.qml</file>
+        <file>qml/UWindow.qml</file>
+        <file>qml/UIconButton.qml</file>
+        <file>assets/icons/window/close.svg</file>
+        <file>assets/icons/window/minimize.svg</file>
+        <file>assets/icons/app/icon.svg</file>
+        <file>qml/UButton.qml</file>
+        <file>assets/icons/airwave.svg</file>
+        <file>assets/icons/info.svg</file>
+        <file>assets/icons/planet.svg</file>
+        <file>assets/icons/settings.svg</file>
     </qresource>
 </RCC>

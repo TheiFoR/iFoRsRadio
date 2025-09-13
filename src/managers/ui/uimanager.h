@@ -16,6 +16,8 @@ class UIManager : public UInterface
 
     Q_PROPERTY(Pages::Page currentPage READ currentPage WRITE setCurrentPage NOTIFY currentPageChanged FINAL)
 
+    Q_PROPERTY(quint8 styleIndex READ styleIndex WRITE setStyleIndex NOTIFY styleIndexChanged FINAL)
+
     Q_PROPERTY(UIServerManager* server READ server CONSTANT FINAL)
     Q_PROPERTY(UIClientManager* client READ client CONSTANT FINAL)
     Q_PROPERTY(UIRadioStationsManager* radioStations READ radioStations CONSTANT FINAL)
@@ -32,14 +34,20 @@ public:
     UIClientManager* client();
     UIRadioStationsManager* radioStations();
 
+    quint8 styleIndex() const;
+    void setStyleIndex(quint8 newStyleIndex);
 
 signals:
     void currentPageChanged();
 
     void clientChanged();
 
+    void styleIndexChanged();
+
 private:
     Pages::Page m_currentPage = Pages::RadioStations;
+
+    quint8 m_styleIndex = 0;
 
     UIServerManager m_server{this};
     UIClientManager m_client{this};

@@ -1,5 +1,7 @@
 import QtQuick
 
+import UStyle
+
 Row {
     id: root
 
@@ -16,7 +18,7 @@ Row {
 
         radius: 10
 
-        color: "#4465FC"
+        color: UStyle.indigoBlue
     }
 
     Text{
@@ -26,9 +28,11 @@ Row {
             verticalCenter: parent.verticalCenter
         }
 
-        text: "IFORSRADIO"
+        text: "IFORRADIO"
 
         font.pixelSize: 24
         font.bold: true
+
+        color: UStyle.neutral100
     }
 }

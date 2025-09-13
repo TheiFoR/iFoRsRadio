@@ -21,6 +21,8 @@ public:
             return "Connecting";
         case Connected:
             return "Connected";
+        default:
+            return "";
         }
     }
 };
