@@ -19,5 +19,14 @@
         <file>assets/icons/info.svg</file>
         <file>assets/icons/planet.svg</file>
         <file>assets/icons/settings.svg</file>
+        <file>qml/URadioItem.qml</file>
+        <file>assets/font/Afacad/Afacad-Bold.ttf</file>
+        <file>assets/font/Afacad/Afacad-BoldItalic.ttf</file>
+        <file>assets/font/Afacad/Afacad-Italic.ttf</file>
+        <file>assets/font/Afacad/Afacad-Medium.ttf</file>
+        <file>assets/font/Afacad/Afacad-MediumItalic.ttf</file>
+        <file>assets/font/Afacad/Afacad-Regular.ttf</file>
+        <file>assets/font/Afacad/Afacad-SemiBold.ttf</file>
+        <file>assets/font/Afacad/Afacad-SemiBoldItalic.ttf</file>
     </qresource>
 </RCC>

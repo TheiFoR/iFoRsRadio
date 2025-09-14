@@ -18,7 +18,7 @@ ColumnLayout{
         Layout.maximumHeight: 30
         Layout.minimumHeight: 30
 
-        text: qsTr("Radio stations")
+        text: qsTr("Radio")
         font.pixelSize: 16
 
         icon{

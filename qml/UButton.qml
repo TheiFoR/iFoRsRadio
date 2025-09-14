@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtQuick.Controls.impl
 
+import UStyle
+
 Button {
     id: root
 
@@ -18,6 +20,8 @@ Button {
     property color textDisabledColor: UStyle.neutral700
 
     property int radius: Math.min(height, width) / 2
+
+    font: UStyle.primaryFontRegular16
 
     spacing: 10
 

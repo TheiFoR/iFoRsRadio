@@ -16,6 +16,7 @@ RadioCore::RadioCore(QObject *parent)
         "name",
         "url",
         "image",
+        "genre",
     });
 }
 
@@ -83,6 +84,7 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
         QByteArray image;
         QString name;
         QString url;
+        QString genre;
 
         if(!ph.handle(id, api::radio::RadioStation::Id)){
             qCWarning(categoryRadioCoreServerStatus) << "Failed to handle image of radio station. Data:" << data;
@@ -90,6 +92,10 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
         }
         if(!ph.handle(name, api::radio::RadioStation::Name)){
             qCWarning(categoryRadioCoreServerStatus) << "Failed to handle name of radio station. Data:" << data;
+            return;
+        }
+        if(!ph.handle(genre, api::radio::RadioStation::Genre)){
+            qCWarning(categoryRadioCoreServerStatus) << "Failed to handle genre of radio station. Data:" << data;
             return;
         }
         if(!ph.handle(url, api::radio::RadioStation::URL)){
@@ -103,6 +109,7 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
             {"id", id},
             {"image", image},
             {"name", name},
+            {"genre", genre},
             {"url", url},
         });
     }

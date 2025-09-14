@@ -30,8 +30,7 @@ Row {
 
         text: "IFORRADIO"
 
-        font.pixelSize: 24
-        font.bold: true
+        font: UStyle.primaryFontBold24
 
         color: UStyle.neutral100
     }

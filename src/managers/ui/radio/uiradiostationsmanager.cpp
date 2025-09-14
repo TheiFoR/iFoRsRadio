@@ -89,8 +89,11 @@ void UIRadioStationsManager::handleUpdateRadioModelPointer(const QVariantMap& da
     m_proxyModel.setSortFunction("name", [](const QVariant& a, const QVariant& b) {
         return a.toString() < b.toString();
     });
+    m_proxyModel.setSortFunction("id", [](const QVariant& a, const QVariant& b) {
+        return a.toULongLong() < b.toULongLong();
+    });
 
-    m_proxyModel.sort("name", Qt::AscendingOrder);
+    m_proxyModel.sort("id", Qt::AscendingOrder);
 }
 
 USortFilterProxyTableModel* UIRadioStationsManager::proxyModel()

@@ -14,6 +14,15 @@ UWindow {
 
     title: qsTr("iFoRsRadio")
 
+    FontLoader {
+        id: afacadRegularFont
+        source: "qrc:/assets/font/Afacad/Afacad-Medium.ttf"
+    }
+    FontLoader {
+        id: afacadBoldFont
+        source: "qrc:/assets/font/Afacad/Afacad-Bold.ttf"
+    }
+
     Item {
         id: rootOpacityContainer
 
@@ -37,8 +46,9 @@ UWindow {
 
             anchors{
                 fill: parent
-                // margins: root.padding
             }
+
+            spacing: 20
 
             Rectangle{
                 id: menuPanel
@@ -91,6 +101,29 @@ UWindow {
                             Layout.fillHeight: true
                         }
                     }
+                }
+            }
+            ColumnLayout{
+                id: pagesContainer
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Layout.rightMargin: 15
+
+                StackLayout{
+                    id: pagesLayout
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    Layout.topMargin: root.headerHeight
+
+                    currentIndex: core.currentPage
+
+                    RadioStationPage{}
+                    // RoomsPage{}
+                    // SettingsPage{}
                 }
             }
         }

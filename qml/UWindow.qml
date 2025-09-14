@@ -12,6 +12,7 @@ Window {
     property int radius: 20
     property int padding: 15
     property int iconSize: 20
+    property int headerHeight: 40
 
     // *** Private properties ***
     readonly property int __borderMouseAreaWidth: 3
@@ -59,7 +60,7 @@ Window {
             right: parent.right
         }
 
-        height: 40
+        height: root.headerHeight
         color: "transparent"
 
         MouseArea {

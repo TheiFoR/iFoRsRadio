@@ -6,6 +6,7 @@
 
 #include "src/core/core.h"
 #include "src/enums/pages.h"
+#include "src/enums/playstates.h"
 #include "src/enums/connectionstatus.h"
 
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
@@ -85,10 +86,10 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    app.setWindowIcon(QIcon(":/assets/icons/app/icon.svg"));
+    Pages::declareQml();
+    PlayStates::declareQml();
 
-    qRegisterMetaType<Pages::Page>("Pages");
-    qmlRegisterUncreatableType<Pages>("Enums", 1, 0, "Pages", "Not creatable as it is an enum type");
+    app.setWindowIcon(QIcon(":/assets/icons/app/icon.svg"));
 
     qRegisterMetaType<ConnectionStatus>("ConnectionStatuses");
     qmlRegisterUncreatableType<ConnectionStatuses>("Enums", 1, 0, "ConnectionStatuses", "Not creatable as it is an enum type");
