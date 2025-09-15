@@ -3,7 +3,6 @@
         <file>qml/main.qml</file>
         <file>qml/NavigationPanel.qml</file>
         <file>qml/LogoPanel.qml</file>
-        <file>qml/UNavigationButton.qml</file>
         <file>qml/RadioStationPage.qml</file>
         <file>qml/SettingsPage.qml</file>
         <file>qml/RoomsPage.qml</file>
@@ -28,5 +27,8 @@
         <file>assets/font/Afacad/Afacad-Regular.ttf</file>
         <file>assets/font/Afacad/Afacad-SemiBold.ttf</file>
         <file>assets/font/Afacad/Afacad-SemiBoldItalic.ttf</file>
+        <file>qml/UMediaPlayer.qml</file>
+        <file>assets/icons/pause.svg</file>
+        <file>assets/icons/sound.svg</file>
     </qresource>
 </RCC>

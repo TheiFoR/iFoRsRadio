@@ -74,7 +74,7 @@ qt_add_resources(RESOURCE_FILES resources.qrc)
 add_executable(${PROJECT_NAME}
     WIN32  # Specify that this is a Windows application
     src/main.cpp # Main entry point for the application
-    ${APP_ICON_RESOURCE_WINDOWS}
+    ${APP_ICON_RESOURCE_WINDOWS}  # Include the Windows application icon resource (if on Windows)
 )
 
 # Add the source and resource files to the executable target

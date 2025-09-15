@@ -19,7 +19,6 @@ ColumnLayout{
         Layout.minimumHeight: 30
 
         text: qsTr("Radio")
-        font.pixelSize: 16
 
         icon{
             source: "qrc:/assets/icons/airwave.svg"
@@ -45,7 +44,6 @@ ColumnLayout{
         enabled: false
 
         text: qsTr("Rooms")
-        font.pixelSize: 16
 
         icon{
             source: "qrc:/assets/icons/planet.svg"
@@ -71,7 +69,6 @@ ColumnLayout{
         enabled: false
 
         text: qsTr("Settings")
-        font.pixelSize: 16
 
         icon{
             source: "qrc:/assets/icons/settings.svg"
@@ -97,7 +94,6 @@ ColumnLayout{
         enabled: false
 
         text: qsTr("About")
-        font.pixelSize: 16
 
         icon{
             source: "qrc:/assets/icons/info.svg"

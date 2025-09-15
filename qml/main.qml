@@ -109,7 +109,8 @@ UWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                Layout.rightMargin: 15
+                Layout.rightMargin: 10
+                Layout.bottomMargin: 10
 
                 StackLayout{
                     id: pagesLayout

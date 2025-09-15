@@ -57,3 +57,8 @@ void UIManager::setStyleIndex(quint8 newStyleIndex)
     m_styleIndex = newStyleIndex;
     emit styleIndexChanged();
 }
+
+UIMediaPlayerManager* UIManager::mediaplayer()
+{
+    return &m_mediaplayer;
+}

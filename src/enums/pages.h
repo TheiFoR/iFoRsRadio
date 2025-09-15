@@ -9,9 +9,10 @@ class Pages : public QObject {
 
 public:
     enum Page {
-        RadioStations = 0,
-        Rooms = 1,
-        Settings = 2,
+        RadioStations,
+        Rooms,
+        Settings,
+        About,
     };
 
     Q_ENUM(Page)

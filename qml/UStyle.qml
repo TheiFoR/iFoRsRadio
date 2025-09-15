@@ -92,6 +92,7 @@ QtObject {
     readonly property font primaryFontRegular12: Qt.font({ family: "Afacad", pixelSize: 12 })
     readonly property font primaryFontRegular14: Qt.font({ family: "Afacad", pixelSize: 14 })
     readonly property font primaryFontRegular16: Qt.font({ family: "Afacad", pixelSize: 16 })
+    readonly property font primaryFontSemibold10: Qt.font({ family: "Afacad", pixelSize: 10, weight: Font.DemiBold })
     readonly property font primaryFontSemibold12: Qt.font({ family: "Afacad", pixelSize: 12, weight: Font.DemiBold })
     readonly property font primaryFontSemibold14: Qt.font({ family: "Afacad", pixelSize: 14, weight: Font.DemiBold })
     readonly property font primaryFontSemibold16: Qt.font({ family: "Afacad", pixelSize: 16, weight: Font.DemiBold })

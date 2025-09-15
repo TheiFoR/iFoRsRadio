@@ -20,6 +20,8 @@ Item{
 
     readonly property bool ready: radioImage.progress === 1.0
 
+    signal clicked()
+
     // *** Private properties ***
     property int __loadingTick: root.blinkAnimationOffset / (loadAnimationTimer.interval / 20)
 
@@ -29,8 +31,6 @@ Item{
     readonly property int __textMoveAnimationDuration: 300
     readonly property int __textOpacityAnimationDuration: 600
     readonly property int __playIconAnimationDuration: 100
-
-    signal clicked()
 
     Timer{
         id: loadAnimationTimer
@@ -311,7 +311,7 @@ Item{
                 text: "Unknown"
                 wrapMode: Text.WordWrap
 
-                font: UStyle.primaryFontSemibold10
+                font: UStyle.primaryFontSemibold12
                 color: UStyle.neutral400
 
                 Behavior on opacity{

@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls.impl
 
 import UStyle
 
@@ -10,15 +11,18 @@ Row {
 
     spacing: 5
 
-    Rectangle{
-        id: logoRectangle
+    ColorImage{
+        id: logoIcon
 
-        height: parent.height
-        width: parent.height
+        width: 30
+        height: width
 
-        radius: 10
+        source: "qrc:/assets/icons/app/icon.svg"
 
-        color: UStyle.indigoBlue
+        sourceSize{
+            width: logoIcon.width
+            height: logoIcon.height
+        }
     }
 
     Text{

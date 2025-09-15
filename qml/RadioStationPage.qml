@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import QtQuick.Effects
 
-Item {
+ColumnLayout {
     id: radioStationsPageRoot
 
     GridView{
@@ -27,9 +27,8 @@ Item {
             return newSpacing
         }
 
-        anchors{
-            fill: parent
-        }
+        Layout.fillHeight: true
+        Layout.fillWidth: true
 
         cellHeight: radioStationsGrid.verticalSpacing + radioStationsGrid.radioStationHeight
         cellWidth: radioStationsGrid.currentHorizontalSpacing + radioStationsGrid.radioStationWidth
@@ -51,76 +50,15 @@ Item {
                 core.radioStations.play(model.id)
             }
         }
+    }
 
-        // delegate: Column{
-        //     width: radioStationsGrid.cellWidth
-        //     Rectangle{
-        //         anchors{
-        //             horizontalCenter: parent.horizontalCenter
-        //         }
-        //         width: radioStationsGrid.radioStationWidth
-        //         height: radioStationsGrid.radioStationHeight
-        //         radius: 15
-        //         color: UStyle.neutral800
+    UMediaPlayer{
+        id: mediaplayerContainer
 
-        //         Image {
-        //             id: img
-        //             width: parent.width
-        //             height: parent.height
-        //             source: model.image
-        //             fillMode: Image.PreserveAspectCrop
-        //         }
+        Layout.fillHeight: true
+        Layout.fillWidth: true
 
-        //         Rectangle
-        //         {
-        //             id: blureRects
-        //             anchors.centerIn: parent
-        //             width: 80
-        //             height: 80
-        //             color: "transparent"
-        //             radius: height / 2
-
-        //             Image{
-        //                 id: playIcon
-
-        //                 anchors{
-        //                     centerIn: parent
-        //                 }
-
-        //                 opacity: 0
-
-        //                 source: "qrc:/assets/icons/play.svg"
-
-        //                 Behavior on opacity{
-        //                     OpacityAnimator { duration: 150; easing.type: Easing.OutExpo }
-        //                 }
-        //             }
-        //         }
-
-        //         MouseArea{
-        //             anchors{
-        //                 fill: parent
-        //             }
-        //             hoverEnabled: true
-        //             onEntered:{
-        //                 playIcon.opacity = 1
-        //             }
-        //             onExited:{
-        //                 playIcon.opacity = 0
-        //             }
-        //             onClicked:{
-        //                 console.warn(model["name"])
-        //                 core.radioStations.play(model.id)
-        //             }
-        //         }
-        //     }
-        //     Text{
-        //         anchors{
-        //             horizontalCenter: parent.horizontalCenter
-        //         }
-
-        //         text: model.name
-        //     }
-        // }
+        Layout.maximumHeight: 40
+        Layout.minimumHeight: 40
     }
 }

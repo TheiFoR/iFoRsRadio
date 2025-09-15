@@ -8,6 +8,7 @@
 #include "src/managers/ui/client/uiclientmanager.h"
 #include "src/managers/ui/radio/uiradiostationsmanager.h"
 #include "src/managers/ui/server/uiservermanager.h"
+#include "src/managers/ui/mediaplayer/uimediaplayermanager.h"
 #include "src/models/list/ulistmodel.h"
 
 class UIManager : public UInterface
@@ -21,6 +22,7 @@ class UIManager : public UInterface
     Q_PROPERTY(UIServerManager* server READ server CONSTANT FINAL)
     Q_PROPERTY(UIClientManager* client READ client CONSTANT FINAL)
     Q_PROPERTY(UIRadioStationsManager* radioStations READ radioStations CONSTANT FINAL)
+    Q_PROPERTY(UIMediaPlayerManager* mediaplayer READ mediaplayer CONSTANT FINAL)
 
 public:
     explicit UIManager(QObject *parent = nullptr);
@@ -33,15 +35,13 @@ public:
     UIServerManager* server();
     UIClientManager* client();
     UIRadioStationsManager* radioStations();
+    UIMediaPlayerManager* mediaplayer();
 
     quint8 styleIndex() const;
     void setStyleIndex(quint8 newStyleIndex);
 
 signals:
     void currentPageChanged();
-
-    void clientChanged();
-
     void styleIndexChanged();
 
 private:
@@ -52,6 +52,7 @@ private:
     UIServerManager m_server{this};
     UIClientManager m_client{this};
     UIRadioStationsManager m_radioStations{this};
+    UIMediaPlayerManager m_mediaplayer{this};
 };
 
 #endif // UIMANAGER_H
