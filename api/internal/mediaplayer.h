@@ -13,7 +13,18 @@ I_API(PlayerPlay){
 I_API(PlayerStop){
 }
 
-} // server
+I_API(PlayerVolume){
+    API_FIELD(Volume) // M, float 0.0f - 1.0f
+}
+I_API(PlayerStateChanged){
+    API_FIELD(Id)  // M, quint64 radio station id
+    API_FIELD(State)  // M, PlayStates::State
+}
+I_API(PlayerCurrentTitleChanged){
+    API_FIELD(Title)  // M, QString
+}
+
+} // mediaPlayer
 } // app
 
 #endif // APPMEDIAPLAYER_H

@@ -2,13 +2,20 @@
 #define USORTFILTERPROXYTABLEMODEL_H
 
 #include <QAbstractProxyModel>
+
 #include <functional>
+#include <algorithm>
+
+#include "src/types/logdef.h"
+#include "utablemodel.h"
 
 class USortFilterProxyTableModel : public QAbstractProxyModel
 {
     Q_OBJECT
 
     Q_PROPERTY(bool dynamicSortFilter READ dynamicSortFilter WRITE setDynamicSortFilter NOTIFY dynamicSortFilterChanged FINAL)
+
+    Q_PROPERTY(qsizetype count READ count NOTIFY countChanged FINAL)
 public:
     explicit USortFilterProxyTableModel(QObject* parent = nullptr);
 
@@ -60,6 +67,7 @@ private:
     bool m_dynamicSortFilter = true;
 
     void resort();
+    void resizeRowOrder();
 };
 
 #endif // USORTFILTERPROXYTABLEMODEL_H

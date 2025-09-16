@@ -2,16 +2,29 @@
 #define CONNECTIONMANAGER_H
 
 #include <QObject>
+#include <queue>
 #include "src/interface/uinterface.h"
 
 struct CommandFunctionContext{
     UInterface* obj;
     CallbackCommandFunction function;
+    UInterface::SubscriptionType type;
 };
 
 struct PacketFunctionContext{
     UInterface* obj;
     CallbackPacketFunction function;
+    UInterface::SubscriptionType type;
+};
+
+struct LostCommand{
+    const qint64 lostTime;
+    const QString commandName;
+    const QVariantMap data;
+};
+struct SentLostCommand{
+    const UInterface* obj;
+    const QString commandName;
 };
 
 class ConnectionManager : public QObject
@@ -24,11 +37,13 @@ public slots:
     void handleCreateSubscribe(const QString& commandName, UInterface* obj);
     void handleRemoveSubscribe(const QString& commandName, UInterface* obj);
 
-    void handleSubscriber(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
+    void handleSubscriber(const QString& commandName, UInterface* obj, CallbackCommandFunction function, UInterface::SubscriptionType type);
     void handleUnsubscriber(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
 
-    void handleSubscriber(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
+    void handleSubscriber(const QString& commandName, UInterface* obj, CallbackPacketFunction function, UInterface::SubscriptionType type);
     void handleUnsubscriber(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
+
+    void handleDone(UInterface* obj);
 
 signals:
     void updateConnections();
@@ -45,6 +60,9 @@ private:
 
     QMap<const QString, QList<PacketFunctionContext>> m_packetSubscribers;
     QMap<const QString, QList<UInterface*>> m_packetSubscribe;
+
+    std::list<LostCommand> m_lostCommands;
+    std::vector<SentLostCommand> m_sentLostCommands;
 };
 
 #endif // CONNECTIONMANAGER_H

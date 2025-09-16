@@ -9,6 +9,7 @@
 
 #include "src/interface/uinterface.h"
 #include "src/utils/parameterhandler.h"
+#include "src/utils/config.h"
 
 class MediaPlayer : public UInterface
 {
@@ -16,8 +17,11 @@ class MediaPlayer : public UInterface
 
 public:
     explicit MediaPlayer(QObject *parent = nullptr);
+    ~MediaPlayer();
 
     void registrationSubscribe() override;
+
+    void start() override;
 
 signals:
 
@@ -31,8 +35,12 @@ private:
     void setSource(const QUrl &url);
     void setVolume(float volume);
 
+    void sendVolume();
+
     void play();
     void stop();
+
+    float m_volume = 1.0f;
 };
 
 #endif // MEDIAPLAYER_H

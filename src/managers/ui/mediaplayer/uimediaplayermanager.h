@@ -1,17 +1,20 @@
 #ifndef UIMEDIAPLAYERMANAGER_H
 #define UIMEDIAPLAYERMANAGER_H
 
+#include "api/internal/mediaPlayer.h"
+
 #include "src/interface/uinterface.h"
 #include "src/enums/playstates.h"
+#include "src/types/logdef.h"
 
 class UIMediaPlayerManager : public UInterface
 {
     Q_OBJECT
 
-    Q_PROPERTY(PlayStates::State currentState READ currentState WRITE setCurrentState NOTIFY currentStateChanged FINAL)
+    Q_PROPERTY(PlayStates::State currentState READ currentState NOTIFY currentStateChanged FINAL)
+    Q_PROPERTY(QString currentTitle READ currentTitle NOTIFY currentTitleChanged FINAL)
 
     Q_PROPERTY(float volume READ volume WRITE setVolume NOTIFY volumeChanged FINAL)
-    Q_PROPERTY(QString currentTitle READ currentTitle WRITE setCurrentTitle NOTIFY currentTitleChanged FINAL)
 
 public:
     explicit UIMediaPlayerManager(QObject *parent = nullptr);
@@ -19,8 +22,10 @@ public:
     void registrationSubscribe() override;
 
     PlayStates::State currentState() const;
-    float volume() const;
     QString currentTitle() const;
+    float volume() const;
+    void setVolume(float newVolume);
+
 
     Q_INVOKABLE void play();
     Q_INVOKABLE void pause();
@@ -36,8 +41,10 @@ private:
     QString m_currentTitle = "iFoR's Radio";
 
     void setCurrentState(const PlayStates::State &newCurrentState);
-    void setVolume(float newVolume);
     void setCurrentTitle(const QString &newCurrentTitle);
+    void sendVolume();
+
+    void handleVolume(const QVariantMap& data);
 };
 
 #endif // UIMEDIAPLAYERMANAGER_H

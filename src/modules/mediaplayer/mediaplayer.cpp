@@ -3,22 +3,41 @@
 LOG_DECLARE(MediaPlayer, Volume)
 LOG_DECLARE(MediaPlayer, Registration)
 LOG_DECLARE(MediaPlayer, HandlePlay)
+LOG_DECLARE(MediaPlayer, HandleVolume)
+LOG_DECLARE(MediaPlayer, Module)
 
 MediaPlayer::MediaPlayer(QObject *parent)
     : UInterface{parent}
 {
     m_player.setAudioOutput(new QAudioOutput(this));
+}
 
+MediaPlayer::~MediaPlayer()
+{
+    Config::setValue("MediaPlayer", "Volume", m_volume);
 }
 
 void MediaPlayer::registrationSubscribe()
 {
     qCInfo(categoryMediaPlayerRegistration) << "Registration subscription started";
 
+    emit createSubscribe(app::mediaPlayer::PlayerVolume::__name__, this);
+
     emit subscribe(app::mediaPlayer::PlayerPlay::__name__, this, std::bind(&MediaPlayer::handlePlay, this, std::placeholders::_1));
     emit subscribe(app::mediaPlayer::PlayerStop::__name__, this, std::bind(&MediaPlayer::handleStop, this, std::placeholders::_1));
+    emit subscribe(app::mediaPlayer::PlayerVolume::__name__, this, std::bind(&MediaPlayer::handleVolume, this, std::placeholders::_1));
 
     qCInfo(categoryMediaPlayerRegistration) << "Registration subscription completed";
+
+    emit done(this);
+}
+
+void MediaPlayer::start()
+{
+    qCInfo(categoryMediaPlayerModule) << "Module has been started";
+
+    setVolume(Config::getValue("MediaPlayer", "Volume", m_volume));
+    sendVolume();
 }
 
 void MediaPlayer::handlePlay(const QVariantMap &data)
@@ -48,8 +67,9 @@ void MediaPlayer::handlePlay(const QVariantMap &data)
     qCInfo(categoryMediaPlayerHandlePlay) << "URL:" << url.toString();
 
     stop();
+
     setSource(url);
-    setVolume(1.0f);
+
     play();
 }
 
@@ -64,7 +84,20 @@ void MediaPlayer::handleStop(const QVariantMap &data)
 
 void MediaPlayer::handleVolume(const QVariantMap &data)
 {
+    ParameterHandler ph(data);
 
+    float volume;
+
+    if(!ph.handle(volume, app::mediaPlayer::PlayerVolume::Volume)){
+        qCWarning(categoryMediaPlayerHandleVolume) << "Failed to handle volume. Data:" << data;
+        return;
+    }
+    if(volume < 0.0f || volume > 1.0f){
+        qCWarning(categoryMediaPlayerHandleVolume) << "Invalid volume value:" << volume << " Volume must be between 0.0 and 1.0";
+        return;
+    }
+
+    setVolume(volume);
 }
 
 void MediaPlayer::setSource(const QUrl &url)
@@ -83,7 +116,16 @@ void MediaPlayer::setVolume(float volume)
         return;
     }
 
-    m_player.audioOutput()->setVolume(volume);
+    m_volume = volume;
+
+    m_player.audioOutput()->setVolume(m_volume);
+}
+
+void MediaPlayer::sendVolume()
+{
+    QVariantMap data;
+    data[app::mediaPlayer::PlayerVolume::Volume] = m_volume;
+    emit signalUCommand(app::mediaPlayer::PlayerVolume::__name__, data);
 }
 
 void MediaPlayer::play()

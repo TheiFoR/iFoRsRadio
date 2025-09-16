@@ -15,6 +15,7 @@ void UIManager::registrationSubscribe()
     registrateTransfer(&m_server, this);
     registrateTransfer(&m_client, this);
     registrateTransfer(&m_radioStations, this);
+    registrateTransfer(&m_mediaplayer, this);
 
     qCInfo(categoryUIManagerCore) << "Registration subscription completed";
 }

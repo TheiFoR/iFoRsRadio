@@ -75,14 +75,14 @@ void UIRadioStationsManager::handleUpdateRadioModelPointer(const QVariantMap& da
 {
     ParameterHandler ph(data);
 
-    std::shared_ptr<UTableModel>* radioModelPointer = nullptr;
+    std::shared_ptr<UTableModel> radioModelPointer;
 
     if(!ph.handle(radioModelPointer, app::model::RadioModel::Model)){
         qCWarning(categoryUIRadioStationsManagerModel) << "Failed to handle radio model. Data:" << data;
         return;
     }
 
-    m_model = *radioModelPointer;
+    m_model = radioModelPointer;
 
     m_proxyModel.setSourceModel(m_model.get());
 

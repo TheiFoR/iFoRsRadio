@@ -33,12 +33,19 @@ void RadioCore::registrationSubscribe()
     emit subscribe(app::radio::Play::__name__, this, std::bind(&RadioCore::handleRadioPlay, this, std::placeholders::_1));
     emit subscribe(app::radio::Stop::__name__, this, std::bind(&RadioCore::handleRadioStop, this, std::placeholders::_1));
 
+    qCInfo(categoryRadioCoreCore) << "Registration subscription ended";
+
+    emit done(this);
+}
+
+void RadioCore::start()
+{
     QVariantMap data;
     data[app::model::RadioModel::Model] = QVariant::fromValue(m_radioModel);
 
-    emit signalUCommand(app::model::RadioModel::__name__, data);
+    qInfo() << "Update radio model pointer" << m_radioModel.get();
 
-    qCInfo(categoryRadioCoreCore) << "Registration subscription ended";
+    emit signalUCommand(app::model::RadioModel::__name__, data);
 }
 
 void RadioCore::handleServerConnectionStatus(const QVariantMap &data)
@@ -113,12 +120,6 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
             {"url", url},
         });
     }
-
-    QVariantMap radioListModel{
-        { app::model::RadioModel::Model, QVariant::fromValue(&m_radioModel) }
-    };
-
-    emit signalUCommand(app::model::RadioModel::__name__, radioListModel);
 
     qCInfo(categoryRadioCoreCore) << "Added" << m_radioModel->count() << "radio station!";
 }

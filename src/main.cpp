@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("core", core.uiManager());
 
-    core.start();
+    core.startCore();
 
 
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));

@@ -17,8 +17,15 @@ class UInterface : public QObject
 public:
     explicit UInterface(QObject *parent = nullptr);
 
+    enum SubscriptionType {
+        Default,
+        SelfHandle,
+    };
+
     virtual void registrationSubscribe() = 0;
     void registrateTransfer(UInterface* fromUInterface, UInterface* toUInterface);
+
+    Q_INVOKABLE virtual void start();
 
 signals:
     void signalUCommand(const QString& commandName, const QVariantMap &data = {});
@@ -27,11 +34,13 @@ signals:
     void createSubscribe(const QString& commandName, UInterface* obj);
     void removeSubscribe(const QString& commandName, UInterface* obj);
 
-    void subscribe(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
-    void subscribe(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
+    void subscribe(const QString& commandName, UInterface* obj, CallbackCommandFunction function, SubscriptionType type = Default);
+    void subscribe(const QString& commandName, UInterface* obj, CallbackPacketFunction function, SubscriptionType type = Default);
 
     void unsubscribe(const QString& commandName, UInterface* obj, CallbackCommandFunction function);
     void unsubscribe(const QString& commandName, UInterface* obj, CallbackPacketFunction function);
+
+    void done(UInterface* obj);
 };
 
 #endif // UINTERFACE_H

@@ -25,6 +25,8 @@ public:
 
     void registrationSubscribe() override;
 
+    void start() override;
+
 signals:
     void serverConnectionStatusChanged();
 

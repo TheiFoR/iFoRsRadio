@@ -1,6 +1,7 @@
 #include "usortfilterproxytablemodel.h"
-#include "utablemodel.h"
-#include <algorithm>
+
+LOG_DECLARE(USFPTableModel, Sort);
+LOG_DECLARE(USFPTableModel, RowOrder);
 
 USortFilterProxyTableModel::USortFilterProxyTableModel(QObject* parent)
     : QAbstractProxyModel(parent) {}
@@ -11,8 +12,7 @@ void USortFilterProxyTableModel::setSourceModel(QAbstractItemModel* sourceModel)
 
     beginResetModel();
     QAbstractProxyModel::setSourceModel(sourceModel);
-    m_rowOrder.resize(sourceModel ? sourceModel->rowCount() : 0);
-    std::iota(m_rowOrder.begin(), m_rowOrder.end(), 0);
+    resizeRowOrder();
     endResetModel();
 
     if (sourceModel) {
@@ -72,11 +72,17 @@ QHash<int, QByteArray> USortFilterProxyTableModel::roleNames() const {
 }
 
 void USortFilterProxyTableModel::sort(int column, Qt::SortOrder order) {
-    if (!sourceModel()) return;
+    if (!sourceModel()){
+        qCWarning(categoryUSFPTableModelSort) << "No source model set";
+        return;
+    }
     QString columnName = sourceModel()->headerData(column, Qt::Horizontal).toString();
 
     auto cmpIt = m_sorters.find(columnName);
-    if (cmpIt == m_sorters.end()) return;
+    if (cmpIt == m_sorters.end()){
+        qCWarning(categoryUSFPTableModelSort) << "No sort function for column:" << columnName;
+        return;
+    }
 
     auto cmp = cmpIt.value();
     auto src = sourceModel();
@@ -123,6 +129,8 @@ void USortFilterProxyTableModel::setCount(qsizetype newCount) {
     if (m_count == newCount)
         return;
     m_count = newCount;
+    resizeRowOrder();
+    resort();
     emit countChanged(m_count);
 }
 
@@ -151,6 +159,15 @@ void USortFilterProxyTableModel::resort()
     if (m_dynamicSortFilter && m_lastSortColumn != -1) {
         sort(m_lastSortColumn);
     }
+}
+
+void USortFilterProxyTableModel::resizeRowOrder()
+{
+    if(!sourceModel()){
+        qCWarning(categoryUSFPTableModelRowOrder) << "No source model set";
+    }
+    m_rowOrder.resize(sourceModel() ? sourceModel()->rowCount() : 0);
+    std::iota(m_rowOrder.begin(), m_rowOrder.end(), 0);
 }
 
 bool USortFilterProxyTableModel::dynamicSortFilter() const
