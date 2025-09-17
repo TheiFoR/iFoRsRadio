@@ -99,3 +99,25 @@ void UIMediaPlayerManager::handleVolume(const QVariantMap &data)
     m_volume = volume;
     emit volumeChanged();
 }
+
+bool UIMediaPlayerManager::muted() const
+{
+    return m_muted;
+}
+
+void UIMediaPlayerManager::setMuted(bool newMuted)
+{
+    if (m_muted == newMuted)
+        return;
+
+    if(newMuted){
+        m_tempVolume = m_volume;
+        setVolume(0.0f);
+    }
+    else{
+        setVolume(m_tempVolume);
+    }
+
+    m_muted = newMuted;
+    emit mutedChanged();
+}

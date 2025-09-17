@@ -15,6 +15,7 @@ class UIMediaPlayerManager : public UInterface
     Q_PROPERTY(QString currentTitle READ currentTitle NOTIFY currentTitleChanged FINAL)
 
     Q_PROPERTY(float volume READ volume WRITE setVolume NOTIFY volumeChanged FINAL)
+    Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged FINAL)
 
 public:
     explicit UIMediaPlayerManager(QObject *parent = nullptr);
@@ -30,14 +31,20 @@ public:
     Q_INVOKABLE void play();
     Q_INVOKABLE void pause();
 
+    bool muted() const;
+    void setMuted(bool newMuted);
+
 signals:
     void currentStateChanged();
     void volumeChanged();
     void currentTitleChanged();
 
+    void mutedChanged();
+
 private:
     PlayStates::State m_currentState = PlayStates::Ready;
     float m_volume = 1.0f;
+    float m_tempVolume = 1.0f;
     QString m_currentTitle = "iFoR's Radio";
 
     void setCurrentState(const PlayStates::State &newCurrentState);
@@ -45,6 +52,7 @@ private:
     void sendVolume();
 
     void handleVolume(const QVariantMap& data);
+    bool m_muted = false;
 };
 
 #endif // UIMEDIAPLAYERMANAGER_H
