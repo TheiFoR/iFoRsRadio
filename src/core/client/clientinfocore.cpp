@@ -9,6 +9,13 @@ ClientInfoCore::ClientInfoCore(QObject *parent)
     qCInfo(categoryClientInfoCoreCore) << "Create";
 }
 
+ClientInfoCore::~ClientInfoCore()
+{
+    qCInfo(categoryClientInfoCoreCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryClientInfoCoreCore) << "Destroy complete";
+}
+
 void ClientInfoCore::registrationSubscribe()
 {
     qCInfo(categoryClientInfoCoreCore) << "Registration subscription started";

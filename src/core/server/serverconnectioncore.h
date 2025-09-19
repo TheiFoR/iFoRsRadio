@@ -13,6 +13,7 @@ class ServerConnectionCore : public UInterface
 {
 public:
     explicit ServerConnectionCore(QObject *parent = nullptr);
+    ~ServerConnectionCore();
 
     void registrationSubscribe() override;
 

@@ -19,6 +19,7 @@ class UIMediaPlayerManager : public UInterface
 
 public:
     explicit UIMediaPlayerManager(QObject *parent = nullptr);
+    ~UIMediaPlayerManager();
 
     void registrationSubscribe() override;
 

@@ -12,6 +12,7 @@ class ClientInfoCore : public UInterface
     Q_OBJECT
 public:
     explicit ClientInfoCore(QObject *parent = nullptr);
+    ~ClientInfoCore();
 
     void registrationSubscribe() override;
 

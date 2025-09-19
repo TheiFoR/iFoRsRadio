@@ -1,7 +1,16 @@
 #include "utablemodel.h"
 
+LOG_DECLARE(UTableModel, Core)
+
 UTableModel::UTableModel(QObject* parent)
     : QAbstractTableModel(parent) {}
+
+UTableModel::~UTableModel()
+{
+    qCInfo(categoryUTableModelCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUTableModelCore) << "Destroy complete";
+}
 
 void UTableModel::setColumns(const QStringList& columns) {
     beginResetModel();

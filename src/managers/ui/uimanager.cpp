@@ -8,6 +8,13 @@ UIManager::UIManager(QObject *parent)
     qCInfo(categoryUIManagerCore) << "Create";
 }
 
+UIManager::~UIManager()
+{
+    qCInfo(categoryUIManagerCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUIManagerCore) << "Destroy complete";
+}
+
 void UIManager::registrationSubscribe()
 {
     qCInfo(categoryUIManagerCore) << "Registration subscription started";

@@ -3,11 +3,19 @@
 
 LOG_DECLARE(UIMediaPlayer, Registration)
 LOG_DECLARE(UIMediaPlayer, HandleVolume)
+LOG_DECLARE(UIMediaPlayer, Core)
 
 UIMediaPlayerManager::UIMediaPlayerManager(QObject *parent)
     : UInterface{parent}
 {
 
+}
+
+UIMediaPlayerManager::~UIMediaPlayerManager()
+{
+    qCInfo(categoryUIMediaPlayerCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUIMediaPlayerCore) << "Destroy complete";
 }
 
 void UIMediaPlayerManager::registrationSubscribe()

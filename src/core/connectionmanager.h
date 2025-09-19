@@ -32,6 +32,7 @@ class ConnectionManager : public QObject
     Q_OBJECT
 public:
     explicit ConnectionManager(QObject *parent = nullptr);
+    ~ConnectionManager();
 
 public slots:
     void handleCreateSubscribe(const QString& commandName, UInterface* obj);

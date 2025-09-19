@@ -16,6 +16,7 @@ class UIRadioStationsManager : public UInterface
 
 public:
     explicit UIRadioStationsManager(QObject *parent = nullptr);
+    ~UIRadioStationsManager();
 
     void registrationSubscribe() override;
 

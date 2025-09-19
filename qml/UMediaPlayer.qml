@@ -128,33 +128,36 @@ Rectangle{
                         bottomMargin: layoutRowLayout.anchors.topMargin + 5
                     }
 
-                    width: 12
+                    width: 16
                     height: 100
                     radius: width / 2
                     color: UStyle.neutral800
 
-                    Slider {
+                    USlider {
                         id: volumeSlider
-                        anchors{
-                            fill: parent
-                            topMargin: 5
-                            bottomMargin: 5
-                            leftMargin: 5
-                            rightMargin: 5
-                        }
+
+                        anchors.fill: parent
                         orientation: Qt.Vertical
 
-                        value: core.mediaplayer.volume
+                        from: 0
+                        to: 1
+                        stepSize: 0.01
 
+                        // установка value, когда меняется громкость извне
+                        Connections {
+                            target: core.mediaplayer
+                            function onVolumeChanged(vol) {
+                                if (!volumeSlider.pressed) {
+                                    volumeSlider.value = core.mediaplayer.volume
+                                }
+                            }
+                        }
+
+                        // изменение громкости, когда двигаем слайдер
                         onValueChanged: {
-                            if (volumeSlider.live) {
+                            if (pressed) {
                                 core.mediaplayer.volume = value
-                                if(core.mediaplayer.volume == 0){
-                                    core.mediaplayer.muted = true
-                                }
-                                else{
-                                    core.mediaplayer.muted = false
-                                }
+                                core.mediaplayer.muted = (value === 0)
                             }
                         }
                     }

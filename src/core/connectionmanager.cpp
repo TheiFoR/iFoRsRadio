@@ -14,6 +14,13 @@ ConnectionManager::ConnectionManager(QObject *parent)
     connect(this, &ConnectionManager::updateConnections, this, &ConnectionManager::handleUpdateConnections);
 }
 
+ConnectionManager::~ConnectionManager()
+{
+    qCInfo(categoryConnectionManagerCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryConnectionManagerCore) << "Destroy complete";
+}
+
 void ConnectionManager::handleCreateSubscribe(const QString &commandName, UInterface *obj)
 {
     qCInfo(categoryConnectionManagerSubscribe) << "Added new command:" << commandName << "from: " << obj;

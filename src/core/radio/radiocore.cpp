@@ -20,6 +20,13 @@ RadioCore::RadioCore(QObject *parent)
     });
 }
 
+RadioCore::~RadioCore()
+{
+    qCInfo(categoryRadioCoreCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryRadioCoreCore) << "Destroy complete";
+}
+
 void RadioCore::registrationSubscribe()
 {
     qCInfo(categoryRadioCoreCore) << "Registration subscription started";

@@ -8,6 +8,30 @@ Core::Core(QObject *parent)
     : UInterface{parent}
 {
     qCInfo(categoryCoreBase) << "Create";
+
+    m_client = std::make_unique<Client>();
+}
+
+Core::~Core()
+{
+    qCInfo(categoryCoreBase) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+
+    if (m_client) {
+        // Остановить работу клиента в его потоке и дождаться завершения (blocking)
+        QMetaObject::invokeMethod(m_client.get(), "stop", Qt::BlockingQueuedConnection);
+    }
+
+    // Остановить поток и дождаться
+    m_clientThread.quit();
+    if (!m_clientThread.wait(3000)) {
+        qCWarning(categoryCoreBase) << "Client thread didn't stop in time, terminating.";
+        m_clientThread.terminate();
+        m_clientThread.wait();
+    }
+
+    // Теперь поток гарантированно остановлен — безопасно удалить объект в текущем потоке
+    qCInfo(categoryCoreBase) << "Destroy complete";
 }
 
 void Core::registrationSubscribe()
@@ -26,7 +50,7 @@ void Core::registrationSubscribe()
     QObject::connect(this, &UInterface::done, &m_connectionManager, &ConnectionManager::handleDone);
 
 
-    registrateTransfer(&m_client, this);
+    registrateTransfer(m_client.get(), this);
 
     registrateTransfer(&m_mediaPlayer, this);
 
@@ -52,8 +76,9 @@ void Core::start()
 {
     qCInfo(categoryCoreModule) << "Start";
 
-    connect(&m_clientThread, &QThread::started, &m_client, &Client::start);
-    m_client.moveToThread(&m_clientThread);
+    connect(&m_clientThread, &QThread::started, m_client.get(), &Client::start);
+
+    m_client->moveToThread(&m_clientThread);
     m_clientThread.start();
 }
 

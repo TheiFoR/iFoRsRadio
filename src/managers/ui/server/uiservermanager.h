@@ -15,6 +15,7 @@ class UIServerManager : public UInterface
 
 public:
     explicit UIServerManager(QObject *parent = nullptr);
+    ~UIServerManager();
 
     void registrationSubscribe() override;
 

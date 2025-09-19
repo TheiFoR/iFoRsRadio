@@ -5,6 +5,7 @@ LOG_DECLARE(MediaPlayer, Registration)
 LOG_DECLARE(MediaPlayer, HandlePlay)
 LOG_DECLARE(MediaPlayer, HandleVolume)
 LOG_DECLARE(MediaPlayer, Module)
+LOG_DECLARE(MediaPlayer, Core)
 
 MediaPlayer::MediaPlayer(QObject *parent)
     : UInterface{parent}
@@ -14,7 +15,10 @@ MediaPlayer::MediaPlayer(QObject *parent)
 
 MediaPlayer::~MediaPlayer()
 {
+    qCInfo(categoryMediaPlayerCore) << "Destroy";
     Config::setValue("MediaPlayer", "Volume", m_volume);
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryMediaPlayerCore) << "Destroy complete";
 }
 
 void MediaPlayer::registrationSubscribe()

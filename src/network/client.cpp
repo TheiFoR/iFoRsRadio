@@ -34,6 +34,34 @@ void Client::registrationSubscribe()
     qCDebug(categoryClientCore) << "Subscriber registration is complete";
 }
 
+void Client::stop()
+{
+    qCInfo(categoryClientStatus) << "Stopping client components";
+
+    if (m_socket) {
+        if (m_socket->state() == QAbstractSocket::ConnectedState ||
+            m_socket->state() == QAbstractSocket::ConnectingState) {
+            m_socket->disconnectFromHost();
+            if (m_socket->state() != QAbstractSocket::UnconnectedState) {
+                m_socket->waitForDisconnected(3000); // Wait up to 3 seconds for disconnection
+            }
+        }
+        m_socket->close();
+    }
+
+    if (m_reconnectTimer) {
+        m_reconnectTimer->stop();
+    }
+
+    if (m_reconnectionConfirmationTimer) {
+        m_reconnectionConfirmationTimer->stop();
+    }
+
+    saveSettings();
+
+    qCInfo(categoryClientStatus) << "Client components stopped";
+}
+
 void Client::start()
 {
     qCInfo(categoryClientStatus) << "Initializing client components";

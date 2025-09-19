@@ -6,6 +6,8 @@
 #include <QVariant>
 #include <QStringList>
 
+#include "src/types/logdef.h"
+
 class UTableModel : public QAbstractTableModel {
     Q_OBJECT
 
@@ -13,6 +15,7 @@ class UTableModel : public QAbstractTableModel {
 
 public:
     explicit UTableModel(QObject* parent = nullptr);
+    ~UTableModel();
 
     void setColumns(const QStringList& columns);
 

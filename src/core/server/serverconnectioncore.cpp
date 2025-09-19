@@ -9,6 +9,13 @@ ServerConnectionCore::ServerConnectionCore(QObject *parent)
     qCInfo(categoryServerConnectionCoreCore) << "Create";
 }
 
+ServerConnectionCore::~ServerConnectionCore()
+{
+    qCInfo(categoryServerConnectionCoreCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryServerConnectionCoreCore) << "Destroy complete";
+}
+
 void ServerConnectionCore::registrationSubscribe()
 {
     qCInfo(categoryServerConnectionCoreCore) << "Registration subscription started";

@@ -26,6 +26,7 @@ class UIManager : public UInterface
 
 public:
     explicit UIManager(QObject *parent = nullptr);
+    ~UIManager();
 
     void registrationSubscribe() override;
 

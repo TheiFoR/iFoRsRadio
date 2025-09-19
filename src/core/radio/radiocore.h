@@ -22,6 +22,7 @@ class RadioCore : public UInterface
 
 public:
     explicit RadioCore(QObject *parent = nullptr);
+    ~RadioCore();
 
     void registrationSubscribe() override;
 

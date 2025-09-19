@@ -9,6 +9,13 @@ UIServerManager::UIServerManager(QObject *parent)
     qCInfo(categoryUIServerManagerCore) << "Create";
 }
 
+UIServerManager::~UIServerManager()
+{
+    qCInfo(categoryUIServerManagerCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUIServerManagerCore) << "Destroy complete";
+}
+
 void UIServerManager::registrationSubscribe()
 {
     qCInfo(categoryUIServerManagerCore) << "Registration subscription started";

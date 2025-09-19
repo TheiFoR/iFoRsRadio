@@ -8,6 +8,13 @@ UIRadioStationsManager::UIRadioStationsManager(QObject *parent)
 {
 }
 
+UIRadioStationsManager::~UIRadioStationsManager()
+{
+    qCInfo(categoryUIRadioStationsManagerCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUIRadioStationsManagerCore) << "Destroy complete";
+}
+
 void UIRadioStationsManager::registrationSubscribe()
 {
     qCInfo(categoryUIRadioStationsManagerCore) << "Registration subscription started";

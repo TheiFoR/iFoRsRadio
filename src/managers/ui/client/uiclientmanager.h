@@ -13,6 +13,7 @@ class UIClientManager : public UInterface
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged FINAL)
 public:
     explicit UIClientManager(QObject *parent = nullptr);
+    ~UIClientManager();
 
     void registrationSubscribe() override;
 

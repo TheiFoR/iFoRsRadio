@@ -1,10 +1,18 @@
 #include "usortfilterproxytablemodel.h"
 
+LOG_DECLARE(USFPTableModel, Core);
 LOG_DECLARE(USFPTableModel, Sort);
 LOG_DECLARE(USFPTableModel, RowOrder);
 
 USortFilterProxyTableModel::USortFilterProxyTableModel(QObject* parent)
     : QAbstractProxyModel(parent) {}
+
+USortFilterProxyTableModel::~USortFilterProxyTableModel()
+{
+    qCInfo(categoryUSFPTableModelCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUSFPTableModelCore) << "Destroy complete";
+}
 
 void USortFilterProxyTableModel::setSourceModel(QAbstractItemModel* sourceModel) {
     connect(qobject_cast<UTableModel*>(sourceModel), &UTableModel::countChanged,

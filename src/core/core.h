@@ -20,6 +20,7 @@ class Core : public UInterface
 
 public:
     explicit Core(QObject *parent = nullptr);
+    ~Core();
 
     UIManager* uiManager();
 
@@ -33,15 +34,15 @@ signals:
 
 private:
     ConnectionManager m_connectionManager{this};
-    UIManager m_uiManager{this};
-
-    MediaPlayer m_mediaPlayer{this};
 
     RadioCore m_radioCore{this};
     ServerConnectionCore m_serverConnectionCore{this};
     ClientInfoCore m_clientInfoCore{this};
+    MediaPlayer m_mediaPlayer{this};
 
-    Client m_client;
+    UIManager m_uiManager{this};
+
+    std::unique_ptr<Client> m_client = nullptr;
     QThread m_clientThread{this};
 
     ConnectionStatuses::Status m_serverConnectionStatus;

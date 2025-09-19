@@ -1,46 +1,42 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Controls.Basic
 
+import UStyle
+
 Slider {
-    id: volumeSlider
-    from: 0
-    to: 1
-    stepSize: 0.01
+    id: control
     value: 0.5
 
-    width: 12
-    height: 100
-    orientation: Qt.Vertical
-
-    // --- Background line ---
     background: Rectangle {
-        id: backgroundRect
-        anchors.fill: parent
-        radius: width / 2
-        color: "#333333"
+        x: control.orientation === Qt.Horizontal ? control.leftPadding : control.leftPadding + control.availableWidth / 2 - width / 2
+        y: control.orientation === Qt.Horizontal ? control.topPadding + control.availableHeight / 2 - height / 2 : control.topPadding
+        implicitWidth: control.orientation === Qt.Horizontal ? 200 : 4
+        implicitHeight: control.orientation === Qt.Horizontal ? 4 : 200
+        width: control.orientation === Qt.Horizontal ? control.availableWidth : implicitWidth
+        height: control.orientation === Qt.Horizontal ? implicitHeight : control.availableHeight
+        radius: Math.min(width, height) / 2
+        color: UStyle.neutral700
+
+        Rectangle {
+            anchors{
+                bottom: parent.bottom
+            }
+
+            width: control.orientation === Qt.Horizontal ? control.visualPosition * parent.width : parent.width
+            height: control.orientation === Qt.Horizontal ? parent.height : (1 - control.visualPosition) * parent.height
+            color: UStyle.indigoBlue
+            radius: Math.min(width, height) / 2
+        }
     }
 
-    // --- Filled part ---
-    Rectangle {
-        width: parent.width
-        height: parent.availableHeight * ((volumeSlider.value - volumeSlider.from) / (volumeSlider.to - volumeSlider.from))
-        anchors.bottom: parent.bottom
-        radius: width / 2
-        color: "#00AAFF"
-    }
-
-    // --- Handle ---
     handle: Rectangle {
-        implicitWidth: 14
-        implicitHeight: 14
-        radius: width / 2
-        color: "#FFFFFF"
-        border.color: "transparent"
+        x: control.orientation === Qt.Horizontal ? control.leftPadding + control.visualPosition * (control.availableWidth - width) : control.leftPadding + control.availableWidth / 2 - width / 2
+        y: control.orientation === Qt.Horizontal ? control.topPadding + control.availableHeight / 2 - height / 2 : control.topPadding + control.visualPosition * (control.availableHeight - height)
 
-        // позиционируем в зависимости от value
-        y: volumeSlider.height * (1 - (volumeSlider.position)) - height / 2
-        x: (volumeSlider.width - width) / 2
+        implicitWidth: 10
+        implicitHeight: 10
+
+        radius: Math.min(implicitWidth, implicitHeight) / 2
+        color: UStyle.neutral100
     }
 }
-

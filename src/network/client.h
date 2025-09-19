@@ -27,6 +27,8 @@ public:
 
     void registrationSubscribe() override;
 
+    Q_INVOKABLE void stop();
+
 public slots:
     void start();
 

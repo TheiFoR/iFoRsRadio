@@ -9,6 +9,13 @@ UIClientManager::UIClientManager(QObject *parent)
     qCInfo(categoryUIClientManagerCore) << "Create";
 }
 
+UIClientManager::~UIClientManager()
+{
+    qCInfo(categoryUIClientManagerCore) << "Destroy";
+    disconnect(this, nullptr, nullptr, nullptr);
+    qCInfo(categoryUIClientManagerCore) << "Destroy complete";
+}
+
 void UIClientManager::registrationSubscribe()
 {
     qCInfo(categoryUIClientManagerCore) << "Registration subscription started";

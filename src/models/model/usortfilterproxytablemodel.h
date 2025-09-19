@@ -18,6 +18,7 @@ class USortFilterProxyTableModel : public QAbstractProxyModel
     Q_PROPERTY(qsizetype count READ count NOTIFY countChanged FINAL)
 public:
     explicit USortFilterProxyTableModel(QObject* parent = nullptr);
+    ~USortFilterProxyTableModel();
 
     void setSourceModel(QAbstractItemModel* sourceModel) override;
 
