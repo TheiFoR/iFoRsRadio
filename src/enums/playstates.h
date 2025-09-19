@@ -9,10 +9,12 @@ class PlayStates : public QObject {
 
 public:
     enum State {
-        Ready,
+        Stopped,
         Playing,
         Paused,
         Loading,
+        // Error,
+        // Empty,
     };
 
     Q_ENUM(State)

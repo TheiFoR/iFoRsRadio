@@ -39,22 +39,25 @@ void UIRadioStationsManager::play(quint64 radioStationId)
         return;
     }
 
-    const auto& url = m_model->data(radioStationId, "url").toString();
+    const QUrl& url = m_model->data(radioStationId, "url").toUrl();
     if(url.isEmpty()){
         qCWarning(categoryUIRadioStationsManagerModel) << "Empty URL for radio station id:" << radioStationId;
         return;
     }
 
-    const auto& name = m_model->data(radioStationId, "name").toString();
+    const QUrl& name = m_model->data(radioStationId, "name").toString();
     if(name.isEmpty()){
         qCWarning(categoryUIRadioStationsManagerModel) << "Empty URL for radio station id:" << radioStationId;
         return;
     }
 
+    const auto& id = m_model->data(radioStationId, "id").toULongLong();
+
     m_currentRadioStationId = radioStationId;
 
     QVariantMap data;
 
+    data[app::radio::Play::Id] = id;
     data[app::radio::Play::Name] = name;
     data[app::radio::Play::URL] = url;
 

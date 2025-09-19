@@ -25,6 +25,7 @@ void UIMediaPlayerManager::registrationSubscribe()
     emit createSubscribe(app::mediaPlayer::PlayerVolume::__name__, this);
 
     emit subscribe(app::mediaPlayer::PlayerVolume::__name__, this, std::bind(&UIMediaPlayerManager::handleVolume, this, std::placeholders::_1));
+    emit subscribe(app::mediaPlayer::PlayerStateChanged::__name__, this, std::bind(&UIMediaPlayerManager::handleStateChanged, this, std::placeholders::_1));
 
     qCInfo(categoryUIMediaPlayerRegistration) << "Registration subscription completed";
 
@@ -38,12 +39,17 @@ PlayStates::State UIMediaPlayerManager::currentState() const
 
 void UIMediaPlayerManager::play()
 {
-
+    emit signalUCommand(app::mediaPlayer::PlayerPlay::__name__);
 }
 
 void UIMediaPlayerManager::pause()
-{
+{    
+    emit signalUCommand(app::mediaPlayer::PlayerPause::__name__);
+}
 
+void UIMediaPlayerManager::stop()
+{
+    emit signalUCommand(app::mediaPlayer::PlayerStop::__name__);
 }
 
 void UIMediaPlayerManager::setCurrentState(const PlayStates::State &newCurrentState)
@@ -106,6 +112,27 @@ void UIMediaPlayerManager::handleVolume(const QVariantMap &data)
 
     m_volume = volume;
     emit volumeChanged();
+}
+
+void UIMediaPlayerManager::handleStateChanged(const QVariantMap &data)
+{
+    qCInfo(categoryUIMediaPlayerCore) << "Handling state changed command.";
+    ParameterHandler ph(data);
+
+    quint64 id;
+    PlayStates::State state;
+
+    if(!ph.handle(id, app::mediaPlayer::PlayerStateChanged::Id)){
+        qCWarning(categoryUIMediaPlayerCore) << "Failed to handle id. Data:" << data;
+        return;
+    }
+    if(!ph.handle(state, app::mediaPlayer::PlayerStateChanged::State)){
+        qCWarning(categoryUIMediaPlayerCore) << "Failed to handle state. Data:" << data;
+        return;
+    }
+
+    qCInfo(categoryUIMediaPlayerCore) << "Media player state changed. ID:" << id << " State:" << state;
+    setCurrentState(state);
 }
 
 bool UIMediaPlayerManager::muted() const

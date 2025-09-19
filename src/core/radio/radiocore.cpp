@@ -137,30 +137,37 @@ void RadioCore::handleRadioPlay(const QVariantMap &data)
 
     ParameterHandler ph(data);
 
+    quint64 id;
     QString name;
-    QString urlString;
+    QUrl url;
 
     if(!ph.handle(name, app::radio::Play::Name)){
         qCWarning(categoryRadioCorePlay) << "Failed to handle name. Data:" << data;
         return;
     }
 
-    if(!ph.handle(urlString, app::radio::Play::URL)){
+    if(!ph.handle(url, app::radio::Play::URL)){
         qCWarning(categoryRadioCorePlay) << "Failed to handle URL. Data:" << data;
         return;
     }
 
-    qCInfo(categoryRadioCorePlay) << "Name:" << name;
-    qCInfo(categoryRadioCorePlay) << "URL:" << urlString;
+    if(!ph.handle(id, app::radio::Play::Id)){
+        qCWarning(categoryRadioCorePlay) << "Failed to handle Id. Data:" << data;
+        return;
+    }
 
-    QUrl url = QUrl::fromUserInput(urlString);
+    qCInfo(categoryRadioCorePlay) << "Id:" << id;
+    qCInfo(categoryRadioCorePlay) << "Name:" << name;
+    qCInfo(categoryRadioCorePlay) << "URL:" << url;
+
     if(!url.isValid()){
-        qCWarning(categoryRadioCorePlay) << "Invalid URL:" << urlString;
+        qCWarning(categoryRadioCorePlay) << "Invalid URL:" << url;
         return;
     }
 
     QVariantMap mediaPlayerData;
 
+    mediaPlayerData[app::mediaPlayer::PlayerPlay::Id] = id;
     mediaPlayerData[app::mediaPlayer::PlayerPlay::Name] = name;
     mediaPlayerData[app::mediaPlayer::PlayerPlay::URL] = url;
 

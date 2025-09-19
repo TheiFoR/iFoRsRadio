@@ -11,6 +11,9 @@ MediaPlayer::MediaPlayer(QObject *parent)
     : UInterface{parent}
 {
     m_player.setAudioOutput(new QAudioOutput(this));
+
+    connect(&m_player, &QMediaPlayer::mediaStatusChanged, this, &MediaPlayer::onMediaStatusChanged);
+    connect(&m_player, &QMediaPlayer::playbackStateChanged, this, &MediaPlayer::onMediaPlaybackChanged);
 }
 
 MediaPlayer::~MediaPlayer()
@@ -26,8 +29,10 @@ void MediaPlayer::registrationSubscribe()
     qCInfo(categoryMediaPlayerRegistration) << "Registration subscription started";
 
     emit createSubscribe(app::mediaPlayer::PlayerVolume::__name__, this);
+    emit createSubscribe(app::mediaPlayer::PlayerStateChanged::__name__, this);
 
     emit subscribe(app::mediaPlayer::PlayerPlay::__name__, this, std::bind(&MediaPlayer::handlePlay, this, std::placeholders::_1));
+    emit subscribe(app::mediaPlayer::PlayerPause::__name__, this, std::bind(&MediaPlayer::handlePause, this, std::placeholders::_1));
     emit subscribe(app::mediaPlayer::PlayerStop::__name__, this, std::bind(&MediaPlayer::handleStop, this, std::placeholders::_1));
     emit subscribe(app::mediaPlayer::PlayerVolume::__name__, this, std::bind(&MediaPlayer::handleVolume, this, std::placeholders::_1));
 
@@ -44,37 +49,126 @@ void MediaPlayer::start()
     sendVolume();
 }
 
+void MediaPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    qCInfo(categoryMediaPlayerCore) << "Media status changed:" << status;
+
+    // PlayStates::State state;
+    // switch (status) {
+    // case QMediaPlayer::NoMedia:
+    //     state = PlayStates::Empty;
+    //     break;
+    // case QMediaPlayer::LoadingMedia:
+    //     state = PlayStates::Loading;
+    //     break;
+    // case QMediaPlayer::LoadedMedia:
+    //     state = PlayStates::Ready;
+    //     break;
+    // case QMediaPlayer::StalledMedia:
+    //     state = PlayStates::Loading;
+    //     break;
+    // case QMediaPlayer::BufferingMedia:
+    //     state = PlayStates::Loading;
+    //     break;
+    // case QMediaPlayer::BufferedMedia:
+    //     state = PlayStates::Playing;
+    //     break;
+    // case QMediaPlayer::EndOfMedia:
+    //     state = PlayStates::Error;
+    //     break;
+    // case QMediaPlayer::InvalidMedia:
+    //     state = PlayStates::Error;
+    //     break;
+    // }
+
+    // if(!m_id){
+    //     qCWarning(categoryMediaPlayerCore) << "Media ID is not set, cannot send state change";
+    //     return;
+    // }
+
+    // QVariantMap data;
+
+    // data[app::mediaPlayer::PlayerStateChanged::Id] = m_id.value();
+    // data[app::mediaPlayer::PlayerStateChanged::State] = state;
+
+    // emit signalUCommand(app::mediaPlayer::PlayerStateChanged::__name__, data);
+}
+
+void MediaPlayer::onMediaPlaybackChanged(QMediaPlayer::PlaybackState state)
+{
+    qCInfo(categoryMediaPlayerCore) << "Media playback state changed:" << state;
+
+    PlayStates::State playState;
+    switch (state) {
+    case QMediaPlayer::PlaybackState::StoppedState:
+        playState = PlayStates::Stopped;
+        break;
+    case QMediaPlayer::PlaybackState::PlayingState:
+        playState = PlayStates::Playing;
+        break;
+    case QMediaPlayer::PlaybackState::PausedState:
+        playState = PlayStates::Paused;
+        break;
+    }
+
+    if(!m_id){
+        qCWarning(categoryMediaPlayerCore) << "Media ID is not set, cannot send state change";
+        return;
+    }
+
+    QVariantMap data;
+
+    data[app::mediaPlayer::PlayerStateChanged::Id] = m_id.value();
+    data[app::mediaPlayer::PlayerStateChanged::State] = playState;
+
+    emit signalUCommand(app::mediaPlayer::PlayerStateChanged::__name__, data);
+}
+
 void MediaPlayer::handlePlay(const QVariantMap &data)
 {
     ParameterHandler ph(data);
 
-    QString name;
-    QUrl url;
+    std::optional<quint64> id;
+    std::optional<QString> name;
+    std::optional<QUrl> url;
 
-    if(!ph.handle(name, app::mediaPlayer::PlayerPlay::Name)){
-        qCWarning(categoryMediaPlayerHandlePlay) << "Failed to handle name. Data:" << data;
-        return;
-    }
+    ph.handle<ParameterHandler::Optional>(id, app::mediaPlayer::PlayerPlay::Id);
+    ph.handle<ParameterHandler::Optional>(name, app::mediaPlayer::PlayerPlay::Name);
+    ph.handle<ParameterHandler::Optional>(url, app::mediaPlayer::PlayerPlay::URL);
 
-    if(!ph.handle(url, app::mediaPlayer::PlayerPlay::URL)){
-        qCWarning(categoryMediaPlayerHandlePlay) << "Failed to handle URL. Data:" << data;
-        return;
-    }
-
-    if(!url.isValid()){
+    if(url && !url.value().isValid()){
         qCWarning(categoryMediaPlayerHandlePlay) << "Invalid URL:" << url;
         return;
     }
 
-    qCInfo(categoryMediaPlayerHandlePlay) << "Playing media:";
-    qCInfo(categoryMediaPlayerHandlePlay) << "Name:" << name;
-    qCInfo(categoryMediaPlayerHandlePlay) << "URL:" << url.toString();
+    if(name && url && id){
+        qCInfo(categoryMediaPlayerHandlePlay) << "Playing media:";
+        qCInfo(categoryMediaPlayerHandlePlay) << "Id:" << id.value();
+        qCInfo(categoryMediaPlayerHandlePlay) << "Name:" << name.value();
+        qCInfo(categoryMediaPlayerHandlePlay) << "URL:" << url.value().toString();
 
-    stop();
+        qCDebug(categoryMediaPlayerHandlePlay) << "Setting media ID to" << id.value();
+        m_id = id;
+    }
+    else{
+        qCInfo(categoryMediaPlayerHandlePlay) << "Resuming media playback";
+    }
 
-    setSource(url);
+    if(url){
+        stop();
+        setSource(url.value());
+    }
 
     play();
+}
+
+void MediaPlayer::handlePause(const QVariantMap &data)
+{
+    Q_UNUSED(data)
+
+    qCInfo(categoryMediaPlayerHandlePlay) << "Pausing media playback";
+
+    pause();
 }
 
 void MediaPlayer::handleStop(const QVariantMap &data)
@@ -134,6 +228,14 @@ void MediaPlayer::sendVolume()
 
 void MediaPlayer::play()
 {
+    if (m_player.playbackState() == QMediaPlayer::PlaybackState::PlayingState) {
+        qCDebug(categoryMediaPlayerHandlePlay) << "Media player is already playing";
+        return;
+    }
+    if (m_player.source().isEmpty()) {
+        qCInfo(categoryMediaPlayerHandlePlay) << "No media source set, cannot play";
+        return;
+    }
     m_player.play();
 }
 
@@ -144,4 +246,13 @@ void MediaPlayer::stop()
         return;
     }
     m_player.stop();
+}
+
+void MediaPlayer::pause()
+{
+    if (m_player.playbackState() == QMediaPlayer::PlaybackState::PausedState) {
+        qCDebug(categoryMediaPlayerHandlePlay) << "Media player is already paused";
+        return;
+    }
+    m_player.pause();
 }

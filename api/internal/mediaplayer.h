@@ -7,8 +7,11 @@ namespace app{
 namespace mediaPlayer{
 
 I_API(PlayerPlay){
-    API_FIELD(Name)  // M, QString
-    API_FIELD(URL)   // M, QUrl
+    API_FIELD(Id)  // M, quint64 radio station id
+    API_FIELD(Name)  // O, QString
+    API_FIELD(URL)   // O, QUrl
+}
+I_API(PlayerPause){
 }
 I_API(PlayerStop){
 }

@@ -34,5 +34,7 @@
         <file>assets/icons/sound_min.svg</file>
         <file>assets/icons/sound_off.svg</file>
         <file>qml/USlider.qml</file>
+        <file>assets/icons/error.svg</file>
+        <file>assets/icons/cloud.svg</file>
     </qresource>
 </RCC>

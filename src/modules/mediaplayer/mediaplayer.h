@@ -6,6 +6,7 @@
 #include <QAudioOutput>
 
 #include "api/internal/mediaPlayer.h"
+#include "src/enums/playstates.h"
 
 #include "src/interface/uinterface.h"
 #include "src/utils/parameterhandler.h"
@@ -25,10 +26,17 @@ public:
 
 signals:
 
+private slots:
+    void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onMediaPlaybackChanged(QMediaPlayer::PlaybackState state);
+
 private:
     QMediaPlayer m_player{this};
+    float m_volume = 1.0f;
+    std::optional<quint64> m_id = std::nullopt;
 
     void handlePlay(const QVariantMap &data);
+    void handlePause(const QVariantMap &data);
     void handleStop(const QVariantMap &data);
     void handleVolume(const QVariantMap &data);
 
@@ -39,8 +47,7 @@ private:
 
     void play();
     void stop();
-
-    float m_volume = 1.0f;
+    void pause();
 };
 
 #endif // MEDIAPLAYER_H

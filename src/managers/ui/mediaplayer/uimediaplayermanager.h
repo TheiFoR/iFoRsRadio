@@ -31,6 +31,7 @@ public:
 
     Q_INVOKABLE void play();
     Q_INVOKABLE void pause();
+    Q_INVOKABLE void stop();
 
     bool muted() const;
     void setMuted(bool newMuted);
@@ -43,17 +44,18 @@ signals:
     void mutedChanged();
 
 private:
-    PlayStates::State m_currentState = PlayStates::Ready;
+    PlayStates::State m_currentState = PlayStates::Stopped;
     float m_volume = 1.0f;
     float m_tempVolume = 1.0f;
     QString m_currentTitle = "iFoR's Radio";
+    bool m_muted = false;
 
     void setCurrentState(const PlayStates::State &newCurrentState);
     void setCurrentTitle(const QString &newCurrentTitle);
     void sendVolume();
 
     void handleVolume(const QVariantMap& data);
-    bool m_muted = false;
+    void handleStateChanged(const QVariantMap& data);
 };
 
 #endif // UIMEDIAPLAYERMANAGER_H

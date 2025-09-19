@@ -1,6 +1,8 @@
 #ifndef UIRADIOSTATIONSMANAGER_H
 #define UIRADIOSTATIONSMANAGER_H
 
+#include <QUrl>
+
 #include "api/internal/radio.h"
 
 #include "src/interface/uinterface.h"

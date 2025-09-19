@@ -14,7 +14,7 @@ Item{
     property alias title: radioTitle.text
     property alias genre: radioGenre.text
 
-    property int playState: PlayStates.Ready
+    property int playState: PlayStates.Stopped
 
     property int blinkAnimationOffset: 0
 
@@ -211,7 +211,7 @@ Item{
                                 return "qrc:/assets/icons/loading.svg"
                             } else if (root.playState === PlayStates.Playing) {
                                 return "qrc:/assets/icons/pause.svg"
-                            } else if (root.playState === PlayStates.Ready || root.playState === PlayStates.Paused) {
+                            } else if (root.playState === PlayStates.Stopped || root.playState === PlayStates.Paused) {
                                 return "qrc:/assets/icons/play.svg"
                             }
                         }

@@ -56,17 +56,23 @@ Rectangle{
                 iconColor: UStyle.neutral100
                 iconSource:{
                     switch(core.mediaplayer.currentState){
-                        case PlayStates.Ready:
+                        case PlayStates.Stopped:
                         case PlayStates.Paused:
                             return "qrc:/assets/icons/play.svg"
                         case PlayStates.Playing:
                             return "qrc:/assets/icons/pause.svg"
+                        // case PlayStates.Loading:
+                        //     return "qrc:/assets/icons/cloud.svg"
+                        // case PlayStates.Error:
+                        //     return "qrc:/assets/icons/error.svg"
+                        // case PlayStates.Empty:
+                        //     return "qrc:/assets/icons/play.svg"
                     }
                 }
 
                 onClicked:{
                     switch(core.mediaplayer.currentState){
-                        case PlayStates.Ready:
+                        case PlayStates.Stopped:
                         case PlayStates.Paused:
                             core.mediaplayer.play()
                             break
