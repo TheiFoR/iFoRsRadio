@@ -17,6 +17,7 @@ RadioCore::RadioCore(QObject *parent)
         "url",
         "image",
         "genre",
+        "state",
     });
 }
 
@@ -39,6 +40,7 @@ void RadioCore::registrationSubscribe()
     emit subscribe(api::radio::RadioStationListResponse::__name__, this, std::bind(&RadioCore::handleRadioStationList, this, std::placeholders::_1));
     emit subscribe(app::radio::Play::__name__, this, std::bind(&RadioCore::handleRadioPlay, this, std::placeholders::_1));
     emit subscribe(app::radio::Stop::__name__, this, std::bind(&RadioCore::handleRadioStop, this, std::placeholders::_1));
+    emit subscribe(app::mediaPlayer::PlayerPlaybackStateChanged::__name__, this, std::bind(&RadioCore::handlePlayerPlaybackStateChanged, this, std::placeholders::_1));
 
     qCInfo(categoryRadioCoreCore) << "Registration subscription ended";
 
@@ -125,6 +127,7 @@ void RadioCore::handleRadioStationList(const QVariantMap &data)
             {"name", name},
             {"genre", genre},
             {"url", url},
+            {"state", PlayStates::Stopped},
         });
     }
 
@@ -181,6 +184,29 @@ void RadioCore::handleRadioStop(const QVariantMap &data)
     qCInfo(categoryRadioCorePlay) << "Stop radio";
 
     emit signalUCommand(app::mediaPlayer::PlayerStop::__name__);
+}
+
+void RadioCore::handlePlayerPlaybackStateChanged(const QVariantMap &data)
+{
+    ParameterHandler ph(data);
+
+    quint64 id;
+    PlayStates::State state;
+
+    if(!ph.handle(id, app::mediaPlayer::PlayerPlaybackStateChanged::Id)){
+        qCWarning(categoryRadioCorePlay) << "Failed to handle Id. Data:" << data;
+        return;
+    }
+    if(!ph.handle(state, app::mediaPlayer::PlayerPlaybackStateChanged::State)){
+        qCWarning(categoryRadioCorePlay) << "Failed to handle State. Data:" << data;
+        return;
+    }
+
+    m_radioModel->update(id, {
+        {"state", state}
+    });
+
+    qCInfo(categoryRadioCorePlay) << "Playback state changed for media ID" << id << "to" << state;
 }
 
 

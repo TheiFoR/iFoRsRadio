@@ -9,6 +9,9 @@ import Enums
 Item{
     id: root
 
+    property int imageWidth: root.width
+    property int imageHeight: root.imageWidth
+
     property alias radius: radioItemBackground.radius
     property alias source: radioImage.source
     property alias title: radioTitle.text
@@ -74,8 +77,8 @@ Item{
                 return Qt.lighter(UStyle.neutral800, factor);
             }
 
-            width: radioItemContainer.width
-            height: width
+            width: root.imageWidth
+            height: root.imageHeight
 
             radius: 10
 

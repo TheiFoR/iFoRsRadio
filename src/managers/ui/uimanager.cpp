@@ -70,3 +70,13 @@ UIMediaPlayerManager* UIManager::mediaplayer()
 {
     return &m_mediaplayer;
 }
+
+QString UIManager::appVersion() const
+{
+    return m_appVersion;
+}
+
+QString UIManager::appName() const
+{
+    return m_appName;
+}

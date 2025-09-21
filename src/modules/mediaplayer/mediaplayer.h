@@ -44,6 +44,7 @@ private:
     void setVolume(float volume);
 
     void sendVolume();
+    void sendPlaybackState(quint64 id, PlayStates::State state);
 
     void play();
     void stop();

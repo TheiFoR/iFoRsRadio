@@ -36,5 +36,6 @@
         <file>qml/USlider.qml</file>
         <file>assets/icons/error.svg</file>
         <file>assets/icons/cloud.svg</file>
+        <file>qml/AboutPage.qml</file>
     </qresource>
 </RCC>

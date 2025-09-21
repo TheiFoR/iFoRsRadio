@@ -32,7 +32,7 @@ Row {
             verticalCenter: parent.verticalCenter
         }
 
-        text: "IFORRADIO"
+        text: "IFORSRADIO"
 
         font: UStyle.primaryFontBold24
 

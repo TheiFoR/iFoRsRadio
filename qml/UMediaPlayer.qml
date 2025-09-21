@@ -77,7 +77,7 @@ Rectangle{
                             core.mediaplayer.play()
                             break
                         case PlayStates.Playing:
-                            core.mediaplayer.pause()
+                            core.mediaplayer.stop()
                             break
                     }
                 }

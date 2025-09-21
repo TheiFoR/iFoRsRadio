@@ -29,7 +29,7 @@ void MediaPlayer::registrationSubscribe()
     qCInfo(categoryMediaPlayerRegistration) << "Registration subscription started";
 
     emit createSubscribe(app::mediaPlayer::PlayerVolume::__name__, this);
-    emit createSubscribe(app::mediaPlayer::PlayerStateChanged::__name__, this);
+    emit createSubscribe(app::mediaPlayer::PlayerPlaybackStateChanged::__name__, this);
 
     emit subscribe(app::mediaPlayer::PlayerPlay::__name__, this, std::bind(&MediaPlayer::handlePlay, this, std::placeholders::_1));
     emit subscribe(app::mediaPlayer::PlayerPause::__name__, this, std::bind(&MediaPlayer::handlePause, this, std::placeholders::_1));
@@ -88,10 +88,10 @@ void MediaPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 
     // QVariantMap data;
 
-    // data[app::mediaPlayer::PlayerStateChanged::Id] = m_id.value();
-    // data[app::mediaPlayer::PlayerStateChanged::State] = state;
+    // data[app::mediaPlayer::PlayerMediaStatusChanged::Id] = m_id.value();
+    // data[app::mediaPlayer::PlayerMediaStatusChanged::State] = state;
 
-    // emit signalUCommand(app::mediaPlayer::PlayerStateChanged::__name__, data);
+    // emit signalUCommand(app::mediaPlayer::PlayerMediaStatusChanged::__name__, data);
 }
 
 void MediaPlayer::onMediaPlaybackChanged(QMediaPlayer::PlaybackState state)
@@ -116,12 +116,7 @@ void MediaPlayer::onMediaPlaybackChanged(QMediaPlayer::PlaybackState state)
         return;
     }
 
-    QVariantMap data;
-
-    data[app::mediaPlayer::PlayerStateChanged::Id] = m_id.value();
-    data[app::mediaPlayer::PlayerStateChanged::State] = playState;
-
-    emit signalUCommand(app::mediaPlayer::PlayerStateChanged::__name__, data);
+    sendPlaybackState(m_id.value(), playState);
 }
 
 void MediaPlayer::handlePlay(const QVariantMap &data)
@@ -148,15 +143,19 @@ void MediaPlayer::handlePlay(const QVariantMap &data)
         qCInfo(categoryMediaPlayerHandlePlay) << "URL:" << url.value().toString();
 
         qCDebug(categoryMediaPlayerHandlePlay) << "Setting media ID to" << id.value();
+
+        if(m_id){
+            sendPlaybackState(m_id.value(), PlayStates::Stopped);
+        }
+        if(m_player.playbackState() != QMediaPlayer::PlaybackState::StoppedState){
+            stop();
+        }
+        setSource(url.value());
+
         m_id = id;
     }
     else{
         qCInfo(categoryMediaPlayerHandlePlay) << "Resuming media playback";
-    }
-
-    if(url){
-        stop();
-        setSource(url.value());
     }
 
     play();
@@ -224,6 +223,16 @@ void MediaPlayer::sendVolume()
     QVariantMap data;
     data[app::mediaPlayer::PlayerVolume::Volume] = m_volume;
     emit signalUCommand(app::mediaPlayer::PlayerVolume::__name__, data);
+}
+
+void MediaPlayer::sendPlaybackState(quint64 id, PlayStates::State state)
+{
+    QVariantMap data;
+
+    data[app::mediaPlayer::PlayerPlaybackStateChanged::Id] = id;
+    data[app::mediaPlayer::PlayerPlaybackStateChanged::State] = state;
+
+    emit signalUCommand(app::mediaPlayer::PlayerPlaybackStateChanged::__name__, data);
 }
 
 void MediaPlayer::play()

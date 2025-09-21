@@ -6,6 +6,7 @@
 
 #include "src/interface/uinterface.h"
 #include "src/enums/connectionstatus.h"
+#include "src/enums/playstates.h"
 #include "src/models/model/utablemodel.h"
 #include "src/utils/parameterhandler.h"
 
@@ -41,6 +42,7 @@ private:
 
     void handleRadioPlay(const QVariantMap& data);
     void handleRadioStop(const QVariantMap& data);
+    void handlePlayerPlaybackStateChanged(const QVariantMap& data);
 
     ConnectionStatuses::Status serverConnectionStatus() const;
     void setServerConnectionStatus(const ConnectionStatuses::Status &newServerConnectionStatus);

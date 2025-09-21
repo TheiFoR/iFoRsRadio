@@ -20,7 +20,6 @@ Window {
     property bool __minimized: false
 
 
-
     width: 800
     height: 600
 

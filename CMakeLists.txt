@@ -3,14 +3,21 @@ cmake_minimum_required(VERSION 3.16)
 
 # Define the project name and version
 set(PROJECT_NAME iFoRsRadio)
-project(${PROJECT_NAME} VERSION 1.0 LANGUAGES CXX)
+project(${PROJECT_NAME} VERSION 0.1.0 LANGUAGES CXX)
+
+set(PROJECT_VERSION_SUFFIX "alpha")
+
+set(FULL_VERSION "${PROJECT_VERSION}-${PROJECT_VERSION_SUFFIX}")
+message(STATUS "Building ${PROJECT_NAME} version ${FULL_VERSION}")
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h
+)
 
 if(WIN32)
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/app/app.rc")
 endif()
-
-# Set the CMake build type to Release by default
-set(CMAKE_PREFIX_PATH "F:/Programs/Qt/6.8.2/msvc2022_64/lib/cmake/Qt6")
 
 # Ensure that the C++ standard required is applied for this project
 set(CMAKE_CXX_STANDARD 17)

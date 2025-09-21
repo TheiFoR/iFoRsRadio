@@ -44,6 +44,8 @@ ColumnLayout {
             title: model.name
             genre: model.genre
 
+            playState: model.state
+
             blinkAnimationOffset: -index * 3
 
             onClicked:{

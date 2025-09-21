@@ -32,56 +32,56 @@ ColumnLayout{
             core.currentPage = Pages.RadioStations
         }
     }
-    UButton{
-        id: roomsButton
+    // UButton{
+    //     id: roomsButton
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+    //     Layout.fillWidth: true
+    //     Layout.fillHeight: true
 
-        Layout.maximumHeight: 30
-        Layout.minimumHeight: 30
+    //     Layout.maximumHeight: 30
+    //     Layout.minimumHeight: 30
 
-        enabled: false
+    //     enabled: false
 
-        text: qsTr("Rooms")
+    //     text: qsTr("Rooms")
 
-        icon{
-            source: "qrc:/assets/icons/planet.svg"
-            width: 20
-            height: 20
-        }
+    //     icon{
+    //         source: "qrc:/assets/icons/planet.svg"
+    //         width: 20
+    //         height: 20
+    //     }
 
-        normalColor: core.currentPage === Pages.Rooms ? UStyle.neutral700 : UStyle.neutral800
+    //     normalColor: core.currentPage === Pages.Rooms ? UStyle.neutral700 : UStyle.neutral800
 
-        onClicked:{
-            core.currentPage = Pages.Rooms
-        }
-    }
-    UButton{
-        id: settingsButton
+    //     onClicked:{
+    //         core.currentPage = Pages.Rooms
+    //     }
+    // }
+    // UButton{
+    //     id: settingsButton
 
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+    //     Layout.fillWidth: true
+    //     Layout.fillHeight: true
 
-        Layout.maximumHeight: 30
-        Layout.minimumHeight: 30
+    //     Layout.maximumHeight: 30
+    //     Layout.minimumHeight: 30
 
-        enabled: false
+    //     enabled: false
 
-        text: qsTr("Settings")
+    //     text: qsTr("Settings")
 
-        icon{
-            source: "qrc:/assets/icons/settings.svg"
-            width: 20
-            height: 20
-        }
+    //     icon{
+    //         source: "qrc:/assets/icons/settings.svg"
+    //         width: 20
+    //         height: 20
+    //     }
 
-        normalColor: core.currentPage === Pages.Settings ? UStyle.neutral700 : UStyle.neutral800
+    //     normalColor: core.currentPage === Pages.Settings ? UStyle.neutral700 : UStyle.neutral800
 
-        onClicked:{
-            core.currentPage = Pages.Settings
-        }
-    }
+    //     onClicked:{
+    //         core.currentPage = Pages.Settings
+    //     }
+    // }
     UButton{
         id: aboutButton
 
@@ -91,7 +91,7 @@ ColumnLayout{
         Layout.maximumHeight: 30
         Layout.minimumHeight: 30
 
-        enabled: false
+        enabled: true
 
         text: qsTr("About")
 
