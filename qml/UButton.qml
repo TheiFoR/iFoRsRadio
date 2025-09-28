@@ -98,11 +98,11 @@ Button {
 
             visible: source !== ""
 
-            Behavior on color{
-                ColorAnimation{
-                    duration: 100
-                }
-            }
+            // Behavior on color{
+            //     ColorAnimation{
+            //         duration: 100
+            //     }
+            // }
         }
 
         Text {
