@@ -12,8 +12,8 @@ UWindow {
     width: 880
     height: 550
 
-    minimumWidth: 500
-    minimumHeight: 400
+    minimumWidth: 700
+    minimumHeight: 450
 
     title: qsTr("iFoRsRadio")
 
@@ -102,6 +102,75 @@ UWindow {
                         Item{
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                        }
+
+                        Rectangle{
+                            Layout.fillWidth: true
+
+                            implicitHeight: 40
+                            radius: 15
+
+                            color: "transparent"
+                            border{
+                                color: themeSwitcherArea.containsMouse
+                                       ? UStyle.neutral600
+                                       : UStyle.neutral700
+                                width: 1
+
+                                Behavior on color{
+                                    ColorAnimation{
+                                        duration: 100
+                                    }
+                                }
+                            }
+
+                            RowLayout{
+                                id: layoutRowLayout
+
+                                anchors{
+                                    fill: parent
+                                    topMargin: 9
+                                    bottomMargin: 9
+                                    leftMargin: 20
+                                    rightMargin: 20
+                                }
+
+                                Text{
+                                    Layout.alignment: Qt.AlignVCenter
+                                    text: "Theme"
+                                    font: UStyle.primaryFontRegular16
+                                    color: UStyle.neutral100
+                                }
+
+                                Item{
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                }
+
+                                UThemeSwitcher{
+                                    id: themeSwitcher
+
+                                    Layout.fillWidth: false
+                                    Layout.fillHeight: true
+
+                                    Layout.minimumWidth: 38
+
+                                    currentIndex: core.styleIndex
+                                }
+                            }
+
+                            MouseArea{
+                                id: themeSwitcherArea
+
+                                anchors.fill: parent
+
+                                cursorShape: Qt.PointingHandCursor
+                                hoverEnabled: true
+
+                                onClicked:{
+                                    core.styleIndex = (core.styleIndex === 0 ? 1 : 0)
+                                }
+                            }
                         }
                     }
                 }

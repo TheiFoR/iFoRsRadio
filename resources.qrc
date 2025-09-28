@@ -37,5 +37,8 @@
         <file>assets/icons/error.svg</file>
         <file>assets/icons/cloud.svg</file>
         <file>qml/AboutPage.qml</file>
+        <file>qml/UThemeSwitcher.qml</file>
+        <file>assets/icons/moon.svg</file>
+        <file>assets/icons/sun.svg</file>
     </qresource>
 </RCC>

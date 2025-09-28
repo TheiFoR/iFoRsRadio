@@ -26,7 +26,10 @@ ColumnLayout{
             height: 20
         }
 
-        normalColor: core.currentPage === Pages.RadioStations ? UStyle.neutral700 : UStyle.neutral800
+        selected: core.currentPage === Pages.RadioStations
+
+        normalColor: UStyle.neutral800
+        pressedColor: UStyle.neutral700
 
         onClicked:{
             core.currentPage = Pages.RadioStations
@@ -101,7 +104,10 @@ ColumnLayout{
             height: 20
         }
 
-        normalColor: core.currentPage === Pages.About ? UStyle.neutral700 : UStyle.neutral800
+        selected: core.currentPage === Pages.About
+
+        normalColor: UStyle.neutral800
+        pressedColor: UStyle.neutral700
 
         onClicked:{
             core.currentPage = Pages.About

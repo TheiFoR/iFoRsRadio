@@ -10,6 +10,7 @@
 #include "src/managers/ui/server/uiservermanager.h"
 #include "src/managers/ui/mediaplayer/uimediaplayermanager.h"
 #include "src/models/list/ulistmodel.h"
+#include "src/utils/config.h"
 #include "src/version.h"
 
 class UIManager : public UInterface

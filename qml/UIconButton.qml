@@ -11,7 +11,7 @@ Button{
     property int iconSize: Math.min(height, width)
 
     property color iconColor: UStyle.neutral400
-    property color hoverColor: UStyle.neutral300
+    property color hoverColor: UStyle.neutral100
     property color pressedColor: UStyle.neutral100
     property color disabledColor: UStyle.neutral600
 
@@ -86,6 +86,13 @@ Button{
             ColorAnimation{
                 duration: 100
             }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.NoButton        // не перехватываем клики
+            cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         }
     }
 }

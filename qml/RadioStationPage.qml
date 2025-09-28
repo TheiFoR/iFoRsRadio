@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
+
+import Enums
 
 ColumnLayout {
     id: radioStationsPageRoot
@@ -49,7 +51,15 @@ ColumnLayout {
             blinkAnimationOffset: -index * 3
 
             onClicked:{
-                core.radioStations.play(model.id)
+                switch(model.state){
+                    case PlayStates.Stopped:
+                    case PlayStates.Paused:
+                        core.radioStations.play(model.id)
+                        break
+                    case PlayStates.Playing:
+                        core.radioStations.stop()
+                        break
+                }
             }
         }
     }

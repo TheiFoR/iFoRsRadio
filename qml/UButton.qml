@@ -11,13 +11,15 @@ Button {
     property color normalColor: "transparent"
     property color hoverColor: normalColor
     property color pressedColor: normalColor
-    property color disabledColor: "transparent"
+    property color disabledColor: normalColor
     property alias backgroundColor: backgroundRect.color
 
-    property color textNormalColor: UStyle.neutral200
+    property color textNormalColor: UStyle.neutral400
     property color textHoverColor: UStyle.neutral100
     property color textPressedColor: UStyle.neutral100
     property color textDisabledColor: UStyle.neutral700
+
+    property bool selected: false
 
     property int radius: Math.min(height, width) / 2
 
@@ -34,7 +36,7 @@ Button {
         color: {
             if(!root.enabled) {
                 return root.disabledColor
-            } else if (root.pressed) {
+            } else if (root.pressed || root.selected) {
                 return root.pressedColor
             } else if (root.hovered) {
                 return root.hoverColor
@@ -44,9 +46,17 @@ Button {
         }
 
         Behavior on color{
+            enabled: true
             ColorAnimation{
                 duration: 100
             }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.NoButton
+            cursorShape: (root.enabled && !root.selected) ? Qt.PointingHandCursor : Qt.ArrowCursor
         }
     }
 
@@ -77,7 +87,7 @@ Button {
             color: {
                 if(!root.enabled) {
                     return root.textDisabledColor
-                } else if (root.pressed) {
+                } else if (root.pressed || root.selected) {
                     return root.textPressedColor
                 } else if (root.hovered) {
                     return root.textHoverColor
@@ -107,7 +117,7 @@ Button {
             color: {
                 if(!root.enabled) {
                     return root.textDisabledColor
-                } else if (root.pressed) {
+                } else if (root.pressed || root.selected) {
                     return root.textPressedColor
                 } else if (root.hovered) {
                     return root.textHoverColor

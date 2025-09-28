@@ -6,12 +6,16 @@ UIManager::UIManager(QObject *parent)
     : UInterface{parent}
 {
     qCInfo(categoryUIManagerCore) << "Create";
+    setStyleIndex(Config::getValue("Common", "style", m_styleIndex));
 }
 
 UIManager::~UIManager()
 {
     qCInfo(categoryUIManagerCore) << "Destroy";
     disconnect(this, nullptr, nullptr, nullptr);
+
+    Config::setValue("Common", "style", m_styleIndex);
+
     qCInfo(categoryUIManagerCore) << "Destroy complete";
 }
 

@@ -59,7 +59,7 @@ Rectangle{
                 }
                 height: 26
                 width: height
-                iconColor: UStyle.neutral100
+                iconColor: UStyle.neutral300
                 iconSource:{
                     switch(core.mediaplayer.currentState){
                         case PlayStates.Stopped:
@@ -97,7 +97,7 @@ Rectangle{
                     id: volumeButton
                     anchors.fill: parent
 
-                    iconColor: UStyle.neutral100
+                    iconColor: UStyle.neutral300
                     iconSource: {
                         if (core.mediaplayer.volume == 0) {
                             return "qrc:/assets/icons/sound_off.svg"

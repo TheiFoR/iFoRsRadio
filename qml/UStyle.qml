@@ -7,16 +7,17 @@ QtObject {
 
     // *** Colors ***
     // - Neutral -
-    readonly property color white: Qt.color("#FFFFFF")
-    readonly property color veryLightGray: Qt.color("#E9E9E9")
-    readonly property color lightGray: Qt.color("#D4D4D4")
-    readonly property color silverGray: Qt.color("#B0B0B0")
-    readonly property color mediumGray: Qt.color("#8A8A8A")
-    readonly property color darkGray: Qt.color("#616161")
-    readonly property color charcoalGray: Qt.color("#464646")
-    readonly property color almostBlack: Qt.color("#2B2B2B")
-    readonly property color coalBlack: Qt.color("#101010")
-    readonly property color black: Qt.color("#000000")
+    readonly property color white: Qt.color("#FFFFFF")          // lightest
+    readonly property color veryLightGray: Qt.color("#F5F5F5") // very light gray
+    readonly property color lightGray: Qt.color("#E0E0E0")     // light gray
+    readonly property color silverGray: Qt.color("#C8C8C8")    // medium-light gray
+    readonly property color mediumGray: Qt.color("#A0A0A0")    // medium gray
+    readonly property color darkGray: Qt.color("#707070")      // dark gray
+    readonly property color charcoalGray: Qt.color("#4A4A4A")  // darker gray
+    readonly property color almostBlack: Qt.color("#1C1C1C")   // almost black
+    readonly property color coalBlack: Qt.color("#101010")     // coal black
+    readonly property color black: Qt.color("#000000")         // pure black
+
     // - Palette -
     readonly property color indigoBlue: Qt.color("#4465FC")
     readonly property color rosewood: Qt.color("#B84C4C")
@@ -25,15 +26,15 @@ QtObject {
 
 
     // *** Neutral Colors ***
-    readonly property color neutral100: getNeutral100(core.styleIndex)
-    readonly property color neutral200: getNeutral200(core.styleIndex)
-    readonly property color neutral300: getNeutral300(core.styleIndex)
-    readonly property color neutral400: getNeutral400(core.styleIndex)
-    readonly property color neutral500: getNeutral500(core.styleIndex)
-    readonly property color neutral600: getNeutral600(core.styleIndex)
-    readonly property color neutral700: getNeutral700(core.styleIndex)
-    readonly property color neutral800: getNeutral800(core.styleIndex)
-    readonly property color neutral900: getNeutral900(core.styleIndex)
+    property color neutral100: getNeutral100(core.styleIndex)
+    property color neutral200: getNeutral200(core.styleIndex)
+    property color neutral300: getNeutral300(core.styleIndex)
+    property color neutral400: getNeutral400(core.styleIndex)
+    property color neutral500: getNeutral500(core.styleIndex)
+    property color neutral600: getNeutral600(core.styleIndex)
+    property color neutral700: getNeutral700(core.styleIndex)
+    property color neutral800: getNeutral800(core.styleIndex)
+    property color neutral900: getNeutral900(core.styleIndex)
 
 
 
@@ -42,24 +43,39 @@ QtObject {
         if(styleIndex === 0){
             return root.white
         }
+        else if (styleIndex === 1){
+            return root.coalBlack
+        }
     }
     function getNeutral200(styleIndex){
         if(styleIndex === 0){
             return root.veryLightGray
+        }
+        else if (styleIndex === 1){
+            return root.almostBlack
         }
     }
     function getNeutral300(styleIndex){
         if(styleIndex === 0){
             return root.lightGray
         }
+        else if (styleIndex === 1){
+            return root.charcoalGray
+        }
     }
     function getNeutral400(styleIndex){
         if(styleIndex === 0){
             return root.silverGray
         }
+        else if (styleIndex === 1){
+            return root.darkGray
+        }
     }
     function getNeutral500(styleIndex){
         if(styleIndex === 0){
+            return root.mediumGray
+        }
+        else if (styleIndex === 1){
             return root.mediumGray
         }
     }
@@ -67,20 +83,32 @@ QtObject {
         if(styleIndex === 0){
             return root.darkGray
         }
+        else if (styleIndex === 1){
+            return root.silverGray
+        }
     }
     function getNeutral700(styleIndex){
         if(styleIndex === 0){
             return root.charcoalGray
+        }
+        else if (styleIndex === 1){
+            return root.lightGray
         }
     }
     function getNeutral800(styleIndex){
         if(styleIndex === 0){
             return root.almostBlack
         }
+        else if (styleIndex === 1){
+            return root.veryLightGray
+        }
     }
     function getNeutral900(styleIndex){
         if(styleIndex === 0){
             return root.coalBlack
+        }
+        else if (styleIndex === 1){
+            return root.white
         }
     }
 
@@ -98,4 +126,53 @@ QtObject {
     readonly property font primaryFontSemibold16: Qt.font({ family: "Afacad", pixelSize: 16, weight: Font.DemiBold })
     readonly property font primaryFontSemibold20: Qt.font({ family: "Afacad", pixelSize: 20, weight: Font.DemiBold })
     readonly property font primaryFontBold24: Qt.font({ family: "Afacad", pixelSize: 24, weight: Font.Bold })
+
+
+
+    // // *** Behaviors (for reusability) ***
+    // Behavior on neutral100{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral200{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral300{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral400{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral500{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral600{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral700{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral800{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
+    // Behavior on neutral900{
+    //     ColorAnimation{
+    //         duration: 100
+    //     }
+    // }
 }
