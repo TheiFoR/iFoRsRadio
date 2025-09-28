@@ -28,8 +28,14 @@ Rectangle{
 
         spacing: 0
 
-        Text{
-            text: core.mediaplayer.currentTitle
+        Text {
+            id: textItem
+            text: {
+                if(core.mediaplayer.currentTrack.artist !== ""){
+                    return core.mediaplayer.currentTrack.artist + " - " + core.mediaplayer.currentTrack.title
+                }
+                return core.mediaplayer.currentTrack.title
+            }
             font: UStyle.primaryFontRegular16
             color: UStyle.neutral100
         }

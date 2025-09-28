@@ -91,6 +91,8 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(QIcon(":/assets/icons/app/icon.svg"));
 
+    qRegisterMetaType<TrackInfo>("TrackInfo");
+
     qRegisterMetaType<ConnectionStatus>("ConnectionStatuses");
     qmlRegisterUncreatableType<ConnectionStatuses>("Enums", 1, 0, "ConnectionStatuses", "Not creatable as it is an enum type");
 

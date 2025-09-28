@@ -9,6 +9,11 @@ struct CommandFunctionContext{
     UInterface* obj;
     CallbackCommandFunction function;
     UInterface::SubscriptionType type;
+
+    friend QDebug operator<<(QDebug dbg, const CommandFunctionContext& ctx) {
+        dbg.nospace() << "CommandFunctionContext(obj=" << ctx.obj << ", type=" << ctx.type << ")";
+        return dbg.space();
+    }
 };
 
 struct PacketFunctionContext{

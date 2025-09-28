@@ -8,7 +8,7 @@ LOG_DECLARE(UIMediaPlayer, Core)
 UIMediaPlayerManager::UIMediaPlayerManager(QObject *parent)
     : UInterface{parent}
 {
-
+    m_currentTrack.title = "iFoRsRadio";
 }
 
 UIMediaPlayerManager::~UIMediaPlayerManager()
@@ -26,6 +26,7 @@ void UIMediaPlayerManager::registrationSubscribe()
 
     emit subscribe(app::mediaPlayer::PlayerVolume::__name__, this, std::bind(&UIMediaPlayerManager::handleVolume, this, std::placeholders::_1));
     emit subscribe(app::mediaPlayer::PlayerPlaybackStateChanged::__name__, this, std::bind(&UIMediaPlayerManager::handleStateChanged, this, std::placeholders::_1));
+    emit subscribe(app::mediaPlayer::PlayerCurrentTrackChanged::__name__, this, std::bind(&UIMediaPlayerManager::handleTrackChanged, this, std::placeholders::_1));
 
     qCInfo(categoryUIMediaPlayerRegistration) << "Registration subscription completed";
 
@@ -82,17 +83,17 @@ void UIMediaPlayerManager::sendVolume()
     emit signalUCommand(app::mediaPlayer::PlayerVolume::__name__, data);
 }
 
-QString UIMediaPlayerManager::currentTitle() const
+TrackInfo UIMediaPlayerManager::currentTrack() const
 {
-    return m_currentTitle;
+    return m_currentTrack;
 }
 
-void UIMediaPlayerManager::setCurrentTitle(const QString &newCurrentTitle)
+void UIMediaPlayerManager::setCurrentTrack(const TrackInfo &newCurrentTrack)
 {
-    if (m_currentTitle == newCurrentTitle)
+    if (m_currentTrack == newCurrentTrack)
         return;
-    m_currentTitle = newCurrentTitle;
-    emit currentTitleChanged();
+    m_currentTrack = newCurrentTrack;
+    emit currentTrackChanged();
 }
 
 void UIMediaPlayerManager::handleVolume(const QVariantMap &data)
@@ -133,6 +134,22 @@ void UIMediaPlayerManager::handleStateChanged(const QVariantMap &data)
 
     qCInfo(categoryUIMediaPlayerCore) << "Media player state changed. ID:" << id << " State:" << state;
     setCurrentState(state);
+}
+
+void UIMediaPlayerManager::handleTrackChanged(const QVariantMap &data)
+{
+    qCInfo(categoryUIMediaPlayerCore) << "Handling track changed command.";
+    ParameterHandler ph(data);
+
+    TrackInfo track;
+
+    if(!ph.handle(track, app::mediaPlayer::PlayerCurrentTrackChanged::Track)){
+        qCWarning(categoryUIMediaPlayerCore) << "Failed to handle track. Data:" << data;
+        return;
+    }
+
+    qCInfo(categoryUIMediaPlayerCore) << "Media player track changed. Track:" << track;
+    setCurrentTrack(track);
 }
 
 bool UIMediaPlayerManager::muted() const

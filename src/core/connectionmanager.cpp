@@ -119,6 +119,7 @@ void ConnectionManager::onCommandReceived(const QString& commandName, const QVar
     if (it != m_commandSubscribers.end()) {
         bool onlySelf = true;
         for (const CommandFunctionContext& ctx : it.value()) {
+            qCDebug(categoryConnectionManagerCommand) << "Checking command for object:" << ctx.obj << "command:" << commandName << "type:" << ctx.type << "sender:" << sender << "this:" << this;
             if (ctx.obj && (ctx.obj != sender || ctx.type == UInterface::SelfHandle)) {
                 if(!m_sentLostCommands.empty()){
                     if(m_sentLostCommands.end() != std::find_if(m_sentLostCommands.begin(), m_sentLostCommands.end(), [ctx, commandName](const SentLostCommand& cmd){
@@ -135,14 +136,40 @@ void ConnectionManager::onCommandReceived(const QString& commandName, const QVar
                 }, Qt::QueuedConnection);
             }
         }
-        if(onlySelf){
-            m_lostCommands.emplace_back(LostCommand{QDateTime::currentMSecsSinceEpoch(), commandName, data});
-            qCWarning(categoryConnectionManagerCommand) << "Lost command detected:" << commandName;
+        if (onlySelf) {
+            const auto &subscribers = it.value(); // список подписчиков
+            const auto subsIt = m_commandSubscribe.find(commandName); // список эмиттеров для этой команды
+
+            QObject* emmitter = nullptr;
+            bool onlySelfCase = false;
+            if (subsIt != m_commandSubscribe.end() && subscribers.size() == 1) {
+                UInterface* singleSubscriber = subscribers.first().obj;
+
+                // Проверяем, совпадает ли подписчик хотя бы с одним из эмиттеров
+                for (UInterface* emitter : subsIt.value()) {
+                    if (emitter == singleSubscriber) {
+                        onlySelfCase = true;
+                        break;
+                    }
+                }
+            }
+
+            if (onlySelfCase) {
+                m_lostCommands.emplace_back(LostCommand{
+                    QDateTime::currentMSecsSinceEpoch(),
+                    commandName,
+                    data
+                });
+                qCWarning(categoryConnectionManagerCommand)
+                << "Lost command detected:" << commandName
+                << "Only one subscriber, and it matches one of the emitters."
+                << "Command is effectively unhandled by any other class.";
+            }
         }
     }
     else{
         m_lostCommands.emplace_back(LostCommand{QDateTime::currentMSecsSinceEpoch(), commandName, data});
-        qCWarning(categoryConnectionManagerCommand) << "Lost command detected:" << commandName;
+        qCWarning(categoryConnectionManagerCommand) << "Lost command detected:" << commandName << "no handlers.";
     }
 }
 void ConnectionManager::onPacketReceived(const QString &commandName, const QVariantMap &data)

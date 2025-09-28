@@ -6,6 +6,7 @@ LOG_DECLARE(MediaPlayer, HandlePlay)
 LOG_DECLARE(MediaPlayer, HandleVolume)
 LOG_DECLARE(MediaPlayer, Module)
 LOG_DECLARE(MediaPlayer, Core)
+LOG_DECLARE(MediaPlayer, SetSource)
 
 MediaPlayer::MediaPlayer(QObject *parent)
     : UInterface{parent}
@@ -14,6 +15,8 @@ MediaPlayer::MediaPlayer(QObject *parent)
 
     connect(&m_player, &QMediaPlayer::mediaStatusChanged, this, &MediaPlayer::onMediaStatusChanged);
     connect(&m_player, &QMediaPlayer::playbackStateChanged, this, &MediaPlayer::onMediaPlaybackChanged);
+
+    connect(&m_apiStreamReader, &ApiStreamReader::trackChanged, this, &MediaPlayer::onTrackChanged);
 }
 
 MediaPlayer::~MediaPlayer()
@@ -30,6 +33,7 @@ void MediaPlayer::registrationSubscribe()
 
     emit createSubscribe(app::mediaPlayer::PlayerVolume::__name__, this);
     emit createSubscribe(app::mediaPlayer::PlayerPlaybackStateChanged::__name__, this);
+    emit createSubscribe(app::mediaPlayer::PlayerPlay::__name__, this);
 
     emit subscribe(app::mediaPlayer::PlayerPlay::__name__, this, std::bind(&MediaPlayer::handlePlay, this, std::placeholders::_1));
     emit subscribe(app::mediaPlayer::PlayerPause::__name__, this, std::bind(&MediaPlayer::handlePause, this, std::placeholders::_1));
@@ -119,6 +123,13 @@ void MediaPlayer::onMediaPlaybackChanged(QMediaPlayer::PlaybackState state)
     sendPlaybackState(m_id.value(), playState);
 }
 
+void MediaPlayer::onTrackChanged(const TrackInfo &track)
+{
+    QVariantMap data;
+    data[app::mediaPlayer::PlayerCurrentTrackChanged::Track] = track;
+    emit signalUCommand(app::mediaPlayer::PlayerCurrentTrackChanged::__name__, data);
+}
+
 void MediaPlayer::handlePlay(const QVariantMap &data)
 {
     ParameterHandler ph(data);
@@ -144,15 +155,18 @@ void MediaPlayer::handlePlay(const QVariantMap &data)
 
         qCDebug(categoryMediaPlayerHandlePlay) << "Setting media ID to" << id.value();
 
-        if(m_id){
-            sendPlaybackState(m_id.value(), PlayStates::Stopped);
-        }
         if(m_player.playbackState() != QMediaPlayer::PlaybackState::StoppedState){
             stop();
+            if(m_id){
+                sendPlaybackState(m_id.value(), PlayStates::Stopped);
+            }
         }
-        setSource(url.value());
 
         m_id = id;
+        m_baseURL = url->scheme() + "://" + url->host();;
+
+        setSource(url.value());
+        qCDebug(categoryMediaPlayerSetSource) << "Base URL set to" << m_baseURL.toString() << "URL:" << url.value().toString();
     }
     else{
         qCInfo(categoryMediaPlayerHandlePlay) << "Resuming media playback";
@@ -199,6 +213,17 @@ void MediaPlayer::handleVolume(const QVariantMap &data)
 
 void MediaPlayer::setSource(const QUrl &url)
 {
+    if(url.isEmpty()){
+        qCWarning(categoryMediaPlayerSetSource) << "Empty URL, cannot set source";
+        return;
+    }
+    if(!m_id){
+        qCWarning(categoryMediaPlayerSetSource) << "Media ID is not set, cannot set source";
+    }
+    m_apiStreamReader.stop();
+    m_apiStreamReader.setApiBaseUrl(m_baseURL);
+    m_apiStreamReader.setStationId(m_id.value());
+    m_apiStreamReader.start();
     m_player.setSource(url);
 }
 

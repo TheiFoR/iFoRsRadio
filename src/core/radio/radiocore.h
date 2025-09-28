@@ -9,6 +9,7 @@
 #include "src/enums/playstates.h"
 #include "src/models/model/utablemodel.h"
 #include "src/utils/parameterhandler.h"
+#include "src/modules/mediaplayer/trackinfo.h"
 
 #include "api/external/radio.h"
 #include "api/internal/server.h"

@@ -27,8 +27,8 @@ I_API(PlayerMediaStatusChanged){
     API_FIELD(Id)  // M, quint64 radio station id
     API_FIELD(State)  // M, PlayStates::State
 }
-I_API(PlayerCurrentTitleChanged){
-    API_FIELD(Title)  // M, QString
+I_API(PlayerCurrentTrackChanged){
+    API_FIELD(Track)  // M, QString
 }
 
 } // mediaPlayer

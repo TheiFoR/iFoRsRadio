@@ -35,6 +35,7 @@ void RadioCore::registrationSubscribe()
     emit createSubscribe(app::model::RadioModel::__name__, this);
     emit createSubscribe(app::mediaPlayer::PlayerPlay::__name__, this);
     emit createSubscribe(app::mediaPlayer::PlayerStop::__name__, this);
+    emit createSubscribe(app::mediaPlayer::PlayerCurrentTrackChanged::__name__, this);
 
     emit subscribe(app::server::ServerStatus::__name__, this, std::bind(&RadioCore::handleServerConnectionStatus, this, std::placeholders::_1));
     emit subscribe(api::radio::RadioStationListResponse::__name__, this, std::bind(&RadioCore::handleRadioStationList, this, std::placeholders::_1));
@@ -167,7 +168,6 @@ void RadioCore::handleRadioPlay(const QVariantMap &data)
         qCWarning(categoryRadioCorePlay) << "Invalid URL:" << url;
         return;
     }
-
     QVariantMap mediaPlayerData;
 
     mediaPlayerData[app::mediaPlayer::PlayerPlay::Id] = id;
