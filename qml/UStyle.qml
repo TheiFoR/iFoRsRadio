@@ -129,50 +129,50 @@ QtObject {
 
 
 
-    // // *** Behaviors (for reusability) ***
-    // Behavior on neutral100{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral200{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral300{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral400{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral500{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral600{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral700{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral800{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
-    // Behavior on neutral900{
-    //     ColorAnimation{
-    //         duration: 100
-    //     }
-    // }
+    // *** Behaviors (for reusability) ***
+    Behavior on neutral100{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral200{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral300{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral400{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral500{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral600{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral700{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral800{
+        ColorAnimation{
+            duration: 100
+        }
+    }
+    Behavior on neutral900{
+        ColorAnimation{
+            duration: 100
+        }
+    }
 }

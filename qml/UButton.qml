@@ -12,7 +12,6 @@ Button {
     property color hoverColor: normalColor
     property color pressedColor: normalColor
     property color disabledColor: normalColor
-    property alias backgroundColor: backgroundRect.color
 
     property color textNormalColor: UStyle.neutral400
     property color textHoverColor: UStyle.neutral100
@@ -20,37 +19,17 @@ Button {
     property color textDisabledColor: UStyle.neutral700
 
     property bool selected: false
-
     property int radius: Math.min(height, width) / 2
 
     font: UStyle.primaryFontRegular16
-
     spacing: 10
+    padding: 10
 
     background: Rectangle {
         id: backgroundRect
-
         anchors.fill: parent
         radius: root.radius
-
-        color: {
-            if(!root.enabled) {
-                return root.disabledColor
-            } else if (root.pressed || root.selected) {
-                return root.pressedColor
-            } else if (root.hovered) {
-                return root.hoverColor
-            } else {
-                return root.normalColor
-            }
-        }
-
-        Behavior on color{
-            enabled: true
-            ColorAnimation{
-                duration: 100
-            }
-        }
+        color: root.normalColor
 
         MouseArea {
             anchors.fill: parent
@@ -60,73 +39,68 @@ Button {
         }
     }
 
-    contentItem: Row{
+    contentItem: Row {
         id: contentRow
-
         spacing: root.spacing
 
-        ColorImage{
+        ColorImage {
             id: iconImage
-
-            anchors{
-                verticalCenter: parent.verticalCenter
-            }
-
+            anchors.verticalCenter: parent.verticalCenter
             source: root.icon.source
-
             width: Math.min(root.icon.height, root.icon.width)
             height: Math.min(root.icon.height, root.icon.width)
-
-            sourceSize{
-                width: iconImage.width
-                height: iconImage.height
-            }
-
+            sourceSize.width: width
+            sourceSize.height: height
             fillMode: Image.PreserveAspectFit
-
-            color: {
-                if(!root.enabled) {
-                    return root.textDisabledColor
-                } else if (root.pressed || root.selected) {
-                    return root.textPressedColor
-                } else if (root.hovered) {
-                    return root.textHoverColor
-                } else {
-                    return root.textNormalColor
-                }
-            }
-
+            color: root.textNormalColor
             visible: source !== ""
-
-            // Behavior on color{
-            //     ColorAnimation{
-            //         duration: 100
-            //     }
-            // }
         }
 
         Text {
             id: buttonText
-
-            anchors{
-                verticalCenter: parent.verticalCenter
-            }
-
+            anchors.verticalCenter: parent.verticalCenter
             text: root.text
             font: root.font
-            color: {
-                if(!root.enabled) {
-                    return root.textDisabledColor
-                } else if (root.pressed || root.selected) {
-                    return root.textPressedColor
-                } else if (root.hovered) {
-                    return root.textHoverColor
-                } else {
-                    return root.textNormalColor
-                }
-            }
+            color: root.textNormalColor
         }
     }
 
-    padding: 10
+    states: [
+        State {
+            name: "disabled"
+            when: !root.enabled
+            PropertyChanges { backgroundRect.color: root.disabledColor }
+            PropertyChanges { iconImage.color: root.textDisabledColor }
+            PropertyChanges { buttonText.color: root.textDisabledColor }
+        },
+        State {
+            name: "pressed"
+            when: root.pressed || root.selected
+            PropertyChanges { backgroundRect.color: root.pressedColor }
+            PropertyChanges { iconImage.color: root.textPressedColor }
+            PropertyChanges { buttonText.color: root.textPressedColor }
+        },
+        State {
+            name: "hovered"
+            when: root.hovered
+            PropertyChanges { backgroundRect.color: root.hoverColor }
+            PropertyChanges { iconImage.color: root.textHoverColor }
+            PropertyChanges { buttonText.color: root.textHoverColor }
+        },
+        State {
+            name: "normal"
+            when: root.enabled && !root.hovered && !root.pressed && !root.selected
+            PropertyChanges { backgroundRect.color: root.normalColor }
+            PropertyChanges { iconImage.color: root.textNormalColor }
+            PropertyChanges { buttonText.color: root.textNormalColor }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "*"
+            to: "*"
+            ColorAnimation { properties: "color"; duration: 100 }
+        }
+    ]
 }
