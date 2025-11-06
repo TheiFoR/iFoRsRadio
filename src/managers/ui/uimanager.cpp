@@ -3,7 +3,7 @@
 LOG_DECLARE(UIManager, Core)
 
 UIManager::UIManager(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryUIManagerCore) << "Create";
     setStyleIndex(Config::getValue("Common", "style", m_styleIndex));

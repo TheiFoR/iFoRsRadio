@@ -8,7 +8,7 @@ LOG_DECLARE(Client, Write)
 LOG_DECLARE(Client, Read)
 
 Client::Client(QObject *parent)
-: UInterface(parent)
+: SubscriptionNode(parent)
 {
     loadSettings();
 
@@ -28,7 +28,7 @@ void Client::registrationSubscribe()
 
     emit createSubscribe(api::server::ServerConnectionResponse::__name__, this);
 
-    emit subscribe(api::server::ServerConnectionResponse::__name__, this, std::bind(&Client::handleServerConnectionStatus, this, std::placeholders::_1), UInterface::SubscriptionType::SelfHandle);
+    emit subscribe(api::server::ServerConnectionResponse::__name__, this, std::bind(&Client::handleServerConnectionStatus, this, std::placeholders::_1), SubscriptionNode::SubscriptionType::SelfHandle);
     emit subscribe(api::radio::RadioStationListRequest::__name__, this, std::bind(&Client::send, this, std::placeholders::_1, std::placeholders::_2));
 
     qCDebug(categoryClientCore) << "Subscriber registration is complete";

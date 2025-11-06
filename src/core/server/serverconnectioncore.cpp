@@ -4,7 +4,7 @@ LOG_DECLARE(ServerConnectionCore, Core)
 LOG_DECLARE(ServerConnectionCore, Status)
 
 ServerConnectionCore::ServerConnectionCore(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryServerConnectionCoreCore) << "Create";
 }

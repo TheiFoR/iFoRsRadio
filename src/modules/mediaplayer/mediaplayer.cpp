@@ -9,7 +9,7 @@ LOG_DECLARE(MediaPlayer, Core)
 LOG_DECLARE(MediaPlayer, SetSource)
 
 MediaPlayer::MediaPlayer(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     m_player.setAudioOutput(new QAudioOutput(this));
 

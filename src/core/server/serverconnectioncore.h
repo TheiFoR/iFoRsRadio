@@ -5,11 +5,12 @@
 #include "api/internal/server.h"
 #include "api/internal/client.h"
 
-#include "src/interface/uinterface.h"
 #include "src/enums/connectionstatus.h"
 #include "src/utils/parameterhandler.h"
 
-class ServerConnectionCore : public UInterface
+#include <SubscriptionNode>
+
+class ServerConnectionCore : public SubscriptionNode
 {
 public:
     explicit ServerConnectionCore(QObject *parent = nullptr);

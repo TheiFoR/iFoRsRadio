@@ -5,7 +5,7 @@ LOG_DECLARE(RadioCore, ServerStatus)
 LOG_DECLARE(RadioCore, Play)
 
 RadioCore::RadioCore(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryRadioCoreCore) << "Create";
 

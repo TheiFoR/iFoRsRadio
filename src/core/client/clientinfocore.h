@@ -4,10 +4,11 @@
 #include "api/external/client.h"
 #include "api/internal/client.h"
 
-#include "src/interface/uinterface.h"
 #include "src/utils/parameterhandler.h"
 
-class ClientInfoCore : public UInterface
+#include <SubscriptionNode>
+
+class ClientInfoCore : public SubscriptionNode
 {
     Q_OBJECT
 public:

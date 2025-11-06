@@ -4,7 +4,7 @@ LOG_DECLARE(UIServerManager, Core);
 LOG_DECLARE(UIServerManager, ServerConnectionStatus);
 
 UIServerManager::UIServerManager(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryUIServerManagerCore) << "Create";
 }

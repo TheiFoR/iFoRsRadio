@@ -4,7 +4,7 @@ LOG_DECLARE(UIRadioStationsManager, Core)
 LOG_DECLARE(UIRadioStationsManager, Model)
 
 UIRadioStationsManager::UIRadioStationsManager(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
 }
 

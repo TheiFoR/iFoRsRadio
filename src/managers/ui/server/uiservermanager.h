@@ -3,11 +3,12 @@
 
 #include "api/internal/server.h"
 
-#include "src/interface/uinterface.h"
 #include "src/enums/connectionstatus.h"
 #include "src/utils/parameterhandler.h"
 
-class UIServerManager : public UInterface
+#include <SubscriptionNode>
+
+class UIServerManager : public SubscriptionNode
 {
     Q_OBJECT
 

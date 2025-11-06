@@ -3,10 +3,11 @@
 
 #include "api/internal/client.h"
 
-#include "src/interface/uinterface.h"
 #include "src/utils/parameterhandler.h"
 
-class UIClientManager : public UInterface
+#include <SubscriptionNode>
+
+class UIClientManager : public SubscriptionNode
 {
     Q_OBJECT
 

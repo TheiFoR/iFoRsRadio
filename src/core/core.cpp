@@ -5,7 +5,7 @@ LOG_DECLARE(Core, ServerStatus)
 LOG_DECLARE(Core, Module)
 
 Core::Core(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryCoreBase) << "Create";
 
@@ -38,16 +38,16 @@ void Core::registrationSubscribe()
 {
     qCInfo(categoryCoreBase) << "Registration subscription started";
 
-    QObject::connect(this, QOverload<const QString&, UInterface*, CallbackCommandFunction, SubscriptionType>::of(&UInterface::subscribe), &m_connectionManager, QOverload<const QString&, UInterface*, CallbackCommandFunction, SubscriptionType>::of(&ConnectionManager::handleSubscriber));
-    QObject::connect(this, QOverload<const QString&, UInterface*, CallbackPacketFunction, SubscriptionType>::of(&UInterface::subscribe), &m_connectionManager, QOverload<const QString&, UInterface*, CallbackPacketFunction, SubscriptionType>::of(&ConnectionManager::handleSubscriber));
+    QObject::connect(this, QOverload<const QString&, SubscriptionNode*, CallbackCommandFunction, SubscriptionType>::of(&SubscriptionNode::subscribe), &m_connectionManager, QOverload<const QString&, SubscriptionNode*, CallbackCommandFunction, SubscriptionType>::of(&SubscriptionManager::handleSubscriber));
+    QObject::connect(this, QOverload<const QString&, SubscriptionNode*, CallbackPacketFunction, SubscriptionType>::of(&SubscriptionNode::subscribe), &m_connectionManager, QOverload<const QString&, SubscriptionNode*, CallbackPacketFunction, SubscriptionType>::of(&SubscriptionManager::handleSubscriber));
 
-    QObject::connect(this, QOverload<const QString&, UInterface*, CallbackCommandFunction>::of(&UInterface::unsubscribe), &m_connectionManager, QOverload<const QString&, UInterface*, CallbackCommandFunction>::of(&ConnectionManager::handleUnsubscriber));
-    QObject::connect(this, QOverload<const QString&, UInterface*, CallbackPacketFunction>::of(&UInterface::unsubscribe), &m_connectionManager, QOverload<const QString&, UInterface*, CallbackPacketFunction>::of(&ConnectionManager::handleUnsubscriber));
+    QObject::connect(this, QOverload<const QString&, SubscriptionNode*, CallbackCommandFunction>::of(&SubscriptionNode::unsubscribe), &m_connectionManager, QOverload<const QString&, SubscriptionNode*, CallbackCommandFunction>::of(&SubscriptionManager::handleUnsubscriber));
+    QObject::connect(this, QOverload<const QString&, SubscriptionNode*, CallbackPacketFunction>::of(&SubscriptionNode::unsubscribe), &m_connectionManager, QOverload<const QString&, SubscriptionNode*, CallbackPacketFunction>::of(&SubscriptionManager::handleUnsubscriber));
 
-    QObject::connect(this, &UInterface::createSubscribe, &m_connectionManager, &ConnectionManager::handleCreateSubscribe);
-    QObject::connect(this, &UInterface::removeSubscribe, &m_connectionManager, &ConnectionManager::handleRemoveSubscribe);
+    QObject::connect(this, &SubscriptionNode::createSubscribe, &m_connectionManager, &SubscriptionManager::handleCreateSubscribe);
+    QObject::connect(this, &SubscriptionNode::removeSubscribe, &m_connectionManager, &SubscriptionManager::handleRemoveSubscribe);
 
-    QObject::connect(this, &UInterface::done, &m_connectionManager, &ConnectionManager::handleDone);
+    QObject::connect(this, &SubscriptionNode::done, &m_connectionManager, &SubscriptionManager::handleDone);
 
 
     registrateTransfer(m_client.get(), this);

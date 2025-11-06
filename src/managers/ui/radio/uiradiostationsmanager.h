@@ -5,12 +5,13 @@
 
 #include "api/internal/radio.h"
 
-#include "src/interface/uinterface.h"
 #include "src/models/model/usortfilterproxytablemodel.h"
 #include "src/models/model/utablemodel.h"
 #include "src/utils/parameterhandler.h"
 
-class UIRadioStationsManager : public UInterface
+#include <SubscriptionNode>
+
+class UIRadioStationsManager : public SubscriptionNode
 {
     Q_OBJECT
 

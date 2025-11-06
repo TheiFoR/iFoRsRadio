@@ -10,12 +10,13 @@
 
 #include "src/modules/mediaplayer/trackinfo.h"
 #include "src/enums/playstates.h"
-#include "src/interface/uinterface.h"
 #include "src/utils/parameterhandler.h"
 #include "src/utils/config.h"
 #include "src/modules/mediaplayer/apistreamreader.h"
 
-class MediaPlayer : public UInterface
+#include <SubscriptionNode>
+
+class MediaPlayer : public SubscriptionNode
 {
     Q_OBJECT
 

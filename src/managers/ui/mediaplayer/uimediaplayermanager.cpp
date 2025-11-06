@@ -6,7 +6,7 @@ LOG_DECLARE(UIMediaPlayer, HandleVolume)
 LOG_DECLARE(UIMediaPlayer, Core)
 
 UIMediaPlayerManager::UIMediaPlayerManager(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     m_currentTrack.title = "iFoRsRadio";
 }

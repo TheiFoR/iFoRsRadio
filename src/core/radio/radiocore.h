@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QUrl>
 
-#include "src/interface/uinterface.h"
 #include "src/enums/connectionstatus.h"
 #include "src/enums/playstates.h"
 #include "src/models/model/utablemodel.h"
@@ -16,7 +15,9 @@
 #include "api/internal/radio.h"
 #include "api/internal/mediaPlayer.h"
 
-class RadioCore : public UInterface
+#include <SubscriptionNode>
+
+class RadioCore : public SubscriptionNode
 {
     Q_OBJECT
 

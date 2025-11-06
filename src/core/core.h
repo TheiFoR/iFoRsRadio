@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-#include "src/core/connectionmanager.h"
-#include "src/interface/uinterface.h"
 #include "src/managers/ui/uimanager.h"
 #include "src/core/client/clientinfocore.h"
 #include "src/core/radio/radiocore.h"
@@ -12,7 +10,9 @@
 #include "src/modules/mediaplayer/mediaplayer.h"
 #include "src/network/client.h"
 
-class Core : public UInterface
+#include <SubscriptionManager>
+
+class Core : public SubscriptionNode
 {
     Q_OBJECT
 
@@ -33,7 +33,7 @@ signals:
     void serverConnectionStatusChanged();
 
 private:
-    ConnectionManager m_connectionManager{this};
+    SubscriptionManager m_connectionManager{this};
 
     RadioCore m_radioCore{this};
     ServerConnectionCore m_serverConnectionCore{this};

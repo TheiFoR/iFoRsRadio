@@ -14,11 +14,12 @@
 #include "api/external/radio.h"
 
 #include "src/enums/connectionstatus.h"
-#include "src/interface/uinterface.h"
 #include "src/utils/config.h"
 #include "src/utils/parameterhandler.h"
 
-class Client : public UInterface
+#include <SubscriptionNode>
+
+class Client : public SubscriptionNode
 {
     Q_OBJECT
 public:

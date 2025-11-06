@@ -1,0 +1,4 @@
+[submodule "SubscriptionService"]
+	path = SubscriptionService
+	url = ../SubscriptionService.git
+	branch = dev

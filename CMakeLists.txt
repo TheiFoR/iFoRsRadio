@@ -1,51 +1,59 @@
-# Set the minimum required version of CMake
+
+# *** Project Initialization ***
+
+
 cmake_minimum_required(VERSION 3.16)
 
-# Define the project name and version
 set(PROJECT_NAME iFoRsRadio)
 project(${PROJECT_NAME} VERSION 0.1.0 LANGUAGES CXX)
 
-set(PROJECT_VERSION_SUFFIX "alpha")
-
+set(PROJECT_VERSION_SUFFIX "beta")
 set(FULL_VERSION "${PROJECT_VERSION}-${PROJECT_VERSION_SUFFIX}")
 message(STATUS "Building ${PROJECT_NAME} version ${FULL_VERSION}")
+
+
+# *** Version Configuration ***
+
 
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in
     ${CMAKE_CURRENT_SOURCE_DIR}/src/version.h
 )
 
+
+# *** Platform-Specific Settings ***
+
+
 if(WIN32)
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/app/app.rc")
 endif()
 
-# Ensure that the C++ standard required is applied for this project
-set(CMAKE_CXX_STANDARD 17)
+
+# *** C++ Standard & Qt Automatic Features ***
+
+
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Enable automoc (automatic generation of MOC files for Qt classes)
 set(CMAKE_AUTOMOC ON)
-
-# Enable automatic handling of resource files (RCC) and UI files (UIC) for Qt
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Enable QML compilation for the project (Qt Quick Compiler)
 set(QT_QML_COMPILER ON CACHE BOOL "Enable QML compiler")
 
-# Set the root directory of the CMakeLists.txt file
+
+# *** Paths & Environment ***
+
+
 set(ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
-
-# Set the directory for Qt's binary files (e.g., Qt DLLs)
 set(QT_BIN_DIR ${Qt6_DIR}/../../../bin)
-
-# Set the directory where Qt plugins are located
 set(QT_PLUGINS_DIR ${Qt6_DIR}/../../../plugins)
-
-# Set the directory for Qt QML files
 set(QT_QML_DIR ${Qt6_DIR}/../../../qml)
 
-# List of Qt dependencies to link with (can be expanded later with more components)
+
+# *** Dependencies ***
+
+
 set(DEP_LIST
     Quick
     Multimedia
@@ -54,72 +62,95 @@ set(DEP_LIST
 include("${ROOT_DIR}/cmake/utils.cmake")
 include("${ROOT_DIR}/cmake/options.cmake")
 
-# Loop through each dependency in DEP_LIST and find the corresponding Qt component
 foreach(dep IN LISTS DEP_LIST)
-    find_package(Qt6 REQUIRED COMPONENTS ${dep})  # Find the necessary Qt6 components
+    find_package(Qt6 REQUIRED COMPONENTS ${dep})
 endforeach()
 
-# Include the current source directory to find header files
+
+# *** Source Files ***
+
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-# Recursively collect all source files in the specified directories
 file(GLOB_RECURSE SRC
-    "src/*.tpp"   # Collect all .tpp files in the src directory
-    "src/*.cpp"   # Collect all .cpp files in the src directory
-    "src/*.h"     # Collect all .h files in the src directory
-    "api/*.cpp"   # Collect all .cpp files in the api directory
-    "api/*.h"     # Collect all .h files in the api directory
+    "src/*.tpp"
+    "src/*.cpp"
+    "src/*.hpp"
+    "src/*.h"
+    "api/*.cpp"
+    "api/*.h"
+)
+list(FILTER SRC EXCLUDE REGEX
+    ".*/shared/.*"
 )
 
-# Set up the project for Qt 6.5 or higher, ensuring proper integration
-qt_standard_project_setup(REQUIRES 6.5)
 
-# Add Qt resources (e.g., images, QML files) from the resource file (resources.qrc)
+# *** Qt Project Setup ***
+
+
+qt_standard_project_setup(REQUIRES 6.8)
 qt_add_resources(RESOURCE_FILES resources.qrc)
 
-# Define the executable target for the project
-add_executable(${PROJECT_NAME}
-    WIN32  # Specify that this is a Windows application
-    src/main.cpp # Main entry point for the application
-    ${APP_ICON_RESOURCE_WINDOWS} # Include the Windows application icon resource (if on Windows)
-)
 
-# Add the source and resource files to the executable target
+# *** Executable Target ***
+
+
+if(WIN32)
+    add_executable(${PROJECT_NAME}
+        WIN32
+        src/main.cpp
+        ${APP_ICON_RESOURCE_WINDOWS}
+    )
+endif()
+
 target_sources(${PROJECT_NAME}
     PRIVATE
-    ${SRC}         # Add the collected source files
-    ${RESOURCE_FILES}  # Add the collected resource files
+    ${SRC}
+    ${RESOURCE_FILES}
 )
 
-# Link the Qt Quick library (and others in the DEP_LIST) to the executable
+
+# *** Linking Dependencies ***
+
+
 foreach(dep IN LISTS DEP_LIST)
     target_link_libraries(${PROJECT_NAME}
-        PRIVATE Qt6::${dep}  # Link all the required Qt libraries from DEP_LIST
+        PRIVATE Qt6::${dep}
     )
 endforeach()
 
-# Set the runtime output directory for the executable
+
+# *** External Libraries ***
+
+
+add_subdirectory(${ROOT_DIR}/src/shared/subscriptionService)
+target_link_libraries(${PROJECT_NAME} PRIVATE SubscriptionService)
+
+
+# *** Output Directories ***
+
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-# Set the library output directory
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-# Set the archive output directory (for static libraries)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
-# Set target properties to ensure the executable is placed in the correct directory
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
-# Set the executable to be a Windows application (without a console window)
-set_target_properties(${PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE FALSE
 )
 
-# Include the GNUInstallDirs module for installation paths (e.g., bin, lib)
+
+# *** Installation ***
+
+
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  # Set the installation directory for the executable
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+
+# *** Deployment (Qt DLLs, Plugins, QML) ***
+
 
 copy_dir("${QT_PLUGINS_DIR}/platforms"    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/plugins/platforms")
 copy_dir("${QT_PLUGINS_DIR}/imageformats" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/plugins/imageformats")
@@ -127,7 +158,9 @@ copy_dir("${QT_PLUGINS_DIR}/styles"       "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/plu
 copy_dir("${QT_QML_DIR}"                  "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qml")
 
 copy_qt_dlls_from_deps(${DEP_LIST})
+
 if(WIN32)
     run_windeployqt6()
 endif()
+
 remove_qt_folder()

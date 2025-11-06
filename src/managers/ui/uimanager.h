@@ -4,7 +4,6 @@
 #include <QObject>
 
 #include "src/enums/pages.h"
-#include "src/interface/uinterface.h"
 #include "src/managers/ui/client/uiclientmanager.h"
 #include "src/managers/ui/radio/uiradiostationsmanager.h"
 #include "src/managers/ui/server/uiservermanager.h"
@@ -13,7 +12,9 @@
 #include "src/utils/config.h"
 #include "src/version.h"
 
-class UIManager : public UInterface
+#include <SubscriptionNode>
+
+class UIManager : public SubscriptionNode
 {
     Q_OBJECT
 

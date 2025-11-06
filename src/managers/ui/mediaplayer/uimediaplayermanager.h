@@ -3,12 +3,13 @@
 
 #include "api/internal/mediaPlayer.h"
 
-#include "src/interface/uinterface.h"
 #include "src/enums/playstates.h"
 #include "src/types/logdef.h"
 #include "src/modules/mediaplayer/trackinfo.h"
 
-class UIMediaPlayerManager : public UInterface
+#include <SubscriptionNode>
+
+class UIMediaPlayerManager : public SubscriptionNode
 {
     Q_OBJECT
 

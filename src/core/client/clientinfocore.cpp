@@ -4,7 +4,7 @@ LOG_DECLARE(ClientInfoCore, Core)
 LOG_DECLARE(ClientInfoCore, Info)
 
 ClientInfoCore::ClientInfoCore(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryClientInfoCoreCore) << "Create";
 }

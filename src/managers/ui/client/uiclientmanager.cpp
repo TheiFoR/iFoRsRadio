@@ -4,7 +4,7 @@ LOG_DECLARE(UIClientManager, Core);
 LOG_DECLARE(UIClientManager, Info);
 
 UIClientManager::UIClientManager(QObject *parent)
-    : UInterface{parent}
+    : SubscriptionNode{parent}
 {
     qCInfo(categoryUIClientManagerCore) << "Create";
 }
