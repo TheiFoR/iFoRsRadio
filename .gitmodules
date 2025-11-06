@@ -1,0 +1,4 @@
+[submodule "src/shared/SubscriptionService"]
+	path = src/shared/SubscriptionService
+	url = ../SubscriptionService.git
+	branch = dev
